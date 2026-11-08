@@ -1,0 +1,52 @@
+{
+  "ago": {
+    "never": "never",
+    "now": "just now",
+    "minutes_one": "{{count}} min ago",
+    "minutes_other": "{{count}} min ago",
+    "hours_one": "{{count}} h ago",
+    "hours_other": "{{count}} h ago",
+    "days_one": "{{count}} day ago",
+    "days_other": "{{count}} days ago",
+    "weeks_one": "{{count}} week ago",
+    "weeks_other": "{{count}} weeks ago"
+  },
+  "span": {
+    "seconds_one": "{{count}} second",
+    "seconds_other": "{{count}} seconds",
+    "minutes_one": "{{count}} minute",
+    "minutes_other": "{{count}} minutes",
+    "hours_one": "{{count}} hour",
+    "hours_other": "{{count}} hours"
+  },
+  "hiddenGame": "A hidden game",
+  "launcherData": "Launcher data",
+  "ui": {
+    "details": "Details",
+    "dropFrom": "Drop {{value}} from {{list}}",
+    "addTo": "Add to {{list}}",
+    "add": "+ add…",
+    "failedView": "This view could not be drawn",
+    "failedHint": "{{why}}. The rest of the page goes on.",
+    "close": "Close",
+    "escape": "esc",
+    "move": "move",
+    "open": "open",
+    "or": "or",
+    "fromAnywhere": "from anywhere",
+    "nothing": "Nothing answers that.",
+    "choose": "Choose {{name}}",
+    "mainNav": "Main",
+    "youAreHere": "You are here",
+    "status": "Status",
+    "download": "Download",
+    "downloadName": "Download {{name}}",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyWhat": "Copy {{what}}",
+    "who": {
+      "user": "user",
+      "administrator": "administrator"
+    }
+  }
+}

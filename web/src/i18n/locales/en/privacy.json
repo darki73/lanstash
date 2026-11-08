@@ -1,0 +1,30 @@
+{
+  "hidden": {
+    "title": "Hidden games",
+    "maskHere": "Mask them on this browser",
+    "showHere": "Show them on this browser",
+    "masked": "Hidden games show as “A hidden game”, without art, page or builds. They stay cached and up to date.",
+    "youSee": "You see hidden games by name, marked hidden. Anyone who may not hide games sees “A hidden game”.",
+    "browserSees": "This browser shows hidden games by name. Other browsers see “A hidden game”.",
+    "none": "No game is hidden. A game's page hides it.",
+    "game": "game",
+    "platform": "platform",
+    "show": "Show to everyone"
+  },
+  "panel": {
+    "title": "Privacy",
+    "hidden": "hidden",
+    "isHidden": "Hidden: others see “A hidden game”, without its art, page or builds.",
+    "hideHelp": "Hide it to mask its name, art, page and builds everywhere. It stays cached and kept up to date.",
+    "show": "Show to everyone",
+    "hide": "Hide game"
+  },
+  "own": {
+    "title": "Keep it to myself",
+    "kept": "private",
+    "help": "Others won't see that you have this game. If nobody else who owns it shares it, they see “A hidden game”. Admins see everything.",
+    "isKept": "Private: others don't see that you have it. Where you are its only owner, they see “A hidden game”.",
+    "keep": "Keep private",
+    "share": "Stop keeping private"
+  }
+}

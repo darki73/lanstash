@@ -1,0 +1,15 @@
+[package]
+name = "lanstash-adapter-dns"
+description = "lanstash adapter: resolving names through the upstream DNS servers."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-domain = { path = "../../domain" }
+lanstash-ports = { path = "../../ports" }
+
+[lints]
+workspace = true

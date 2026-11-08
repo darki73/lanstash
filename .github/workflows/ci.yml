@@ -1,0 +1,42 @@
+# Every check the project keeps: Rust (format, lints, every test, the architecture rules among them)
+# and the web UI (lint, types, tests). Run on pushes to main, pull requests, and by the release.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Rust 1.95.0 (the workspace's rust-version)
+        run: |
+          rustup toolchain install 1.95.0 --profile minimal --component clippy,rustfmt
+          rustup default 1.95.0
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - run: cargo test --workspace --locked
+
+  web:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      # pnpm at the version package.json names (packageManager).
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run typecheck
+      - run: pnpm run test

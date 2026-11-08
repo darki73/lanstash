@@ -1,0 +1,19 @@
+[package]
+name = "lanstash-adapter-steam"
+description = "lanstash adapter: Steam's connection manager over WebSocket and TLS."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-domain = { path = "../../domain" }
+lanstash-ports = { path = "../../ports" }
+# TLS for wss:// (plan 06; approved for this crate alone in crates/architecture's policy).
+# rustls: Apache-2.0 OR ISC OR MIT. webpki-roots: CDLA-Permissive-2.0.
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
+webpki-roots = "=1.0.11"
+
+[lints]
+workspace = true

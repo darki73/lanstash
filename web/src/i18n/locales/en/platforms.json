@@ -1,0 +1,503 @@
+{
+  "part": {
+    "cached": "Cached",
+    "library": "Library",
+    "prefill": "Prefill",
+    "account": "Account",
+    "activity": "Activity",
+    "setup": "Setup"
+  },
+  "nav": "Platforms",
+  "noPlatform": {
+    "title": "No platform called {{id}}",
+    "hint": "The sidebar lists the platforms lanstash knows."
+  },
+  "tagline": {
+    "blizzard": "Blizzard's games, from Blizzard's CDN",
+    "steam": "Valve's store, from Steam's content servers",
+    "epicgames": "The Epic Games Store, from Epic's CDN",
+    "riot": "Riot's games, from Riot's CDN",
+    "other": "What lanstash holds of {{name}}"
+  },
+  "code": {
+    "productCode": "product code",
+    "depot": "depot",
+    "path": "path",
+    "id": "id"
+  },
+  "about": {
+    "blizzard": {
+      "cdn": "Content comes from Blizzard's CDN hosts under /tpr/<product>/; the product code names the game (osi is Diablo II: Resurrected, hs is Hearthstone).",
+      "launcherData": "Catalogs, configs and the bnt directories are the launcher's own data: its list of products, their build configurations, the launcher and its bootstrapper.",
+      "builds": "Each game's current build is checked with Blizzard's patch service every few minutes; a game is current when the stash holds all of that build's install (the files its download manifest lists for Windows, the configured locale and region), and a percentage says how much of it the stash holds. A pre-release build, which the launcher downloads ahead of a launch, shows up when Blizzard publishes one.",
+      "ranges": "Large archives are fetched in ranges, so a game is often only partly in the cache.",
+      "art": "Key art and icons come from the launcher's own product catalog, which lanstash reads from Blizzard's CDN once and keeps."
+    },
+    "steam": {
+      "depots": "A game arrives as depots (its content split by platform and language), each stored on its own; the depots of one app are shown together, under the app's store art.",
+      "crc": "Chunks are checked against the CRC Steam sends with them before they are kept."
+    },
+    "epicgames": {
+      "directories": "A game's downloads are filed under a directory of their own, not its app id; lanstash shows them under the app, with its name and art.",
+      "sha": "Chunks from Epic's CDN are checked against the SHA-1 their build's manifest gives before they are kept.",
+      "oldBuilds": "Old builds' segments go on their own once the current build is held whole and a week passed unused; Prune on a game's page shows what would go."
+    }
+  },
+  "chip": {
+    "stored": "stored",
+    "share": "of the cache",
+    "games_one": "game",
+    "games_other": "games",
+    "objects": "objects",
+    "downloading": "downloading",
+    "all": "all",
+    "current": "current",
+    "behindIn": "behind in {{where}}",
+    "behindFor": "behind for {{where}}"
+  },
+  "partsLabel": "{{name}}'s parts",
+  "activity": {
+    "idle": "Nothing from {{name}} is downloading right now",
+    "about": "About {{name}} in lanstash"
+  },
+  "build": {
+    "current": "current",
+    "checking": "checking",
+    "unknown": "unknown",
+    "stashed": "stashed"
+  },
+  "button": {
+    "stop": "Stop",
+    "stopLabel": "Stop prefilling {{name}}",
+    "stopAsk": "Stop…",
+    "stopAskLabel": "Stop prefilling {{name}}…",
+    "stopNow": "Stop now",
+    "stopNowLabel": "Stop prefilling {{name}} now",
+    "keepGoing": "Keep going",
+    "queued": "Queued",
+    "queuedLabel": "{{name}} is queued",
+    "starting": "Starting…",
+    "startingLabel": "{{name}} is starting",
+    "queue": "Queue",
+    "queueLabel": "Queue {{name}} after the running prefill",
+    "queueFromLancache": "Queue from lancache",
+    "queueAfterFromLancacheLabel": "Queue {{name}} after the running prefill, from lancache's old cache first",
+    "queueFromLancacheLabel": "Queue {{name}} from lancache's old cache first",
+    "preload": "Pre-load",
+    "preloadLabel": "Pre-load {{name}} {{version}}",
+    "preloadFromLancacheLabel": "Pre-load {{name}} from lancache's old cache first",
+    "fromLancache": "From lancache",
+    "prefill": "Prefill",
+    "prefillLabel": "Prefill {{name}}",
+    "prefillFromLancacheLabel": "Prefill {{name}} from lancache's old cache first",
+    "queuePrefills_one": "Queue {{n}} prefill",
+    "queuePrefills_other": "Queue {{n}} prefills"
+  },
+  "offers": {
+    "order": {
+      "name": "Name",
+      "size": "Size",
+      "lancache": "In lancache"
+    },
+    "view": {
+      "covers": "Covers",
+      "list": "List"
+    },
+    "filter": {
+      "all": "All",
+      "held": "In lancache"
+    },
+    "heldNone": "none",
+    "heldAbout": "about {{share}}",
+    "heldBadge": "{{share}} in lancache",
+    "allCached": "Every game on {{name}} lanstash knows of is in the cache",
+    "title_one": "{{n}} more game on {{name}}",
+    "title_other": "{{n}} more games on {{name}}",
+    "how": "How to show the games",
+    "search": "Search {{name}}'s games",
+    "searchPlaceholder": "Search by name",
+    "none": "No game here",
+    "noMatch": "No game here matches “{{query}}”.",
+    "choose": "Choose games to queue",
+    "shown": "{{n}} shown",
+    "chooseNone": "Choose none of the games shown",
+    "chooseAll": "Choose all {{n}} games shown",
+    "chooseOne": "Choose {{name}}",
+    "grid": "{{name}}'s games to choose from",
+    "column": {
+      "game": "Game",
+      "version": "Version",
+      "download": "Download",
+      "lancache": "In lancache",
+      "owners": "Owned by"
+    },
+    "bar": {
+      "label": "The chosen games",
+      "clear": "Clear",
+      "importLabel": "Import what lancache holds of {{n}} chosen games",
+      "import": "Import from lancache ({{size}})",
+      "queueLabel": "Queue {{n}} prefills",
+      "chosen_one": "{{n}} game chosen · a prefill downloads about {{size}}",
+      "chosen_other": "{{n}} games chosen · a prefill downloads about {{size}}",
+      "fromLancache": ", about {{size}} of it from lancache",
+      "free": " · {{size}} free on the disk",
+      "unsized": "{{n}} of them {{name}} gives no size for: not counted.",
+      "tooBig": "More than is free: eviction will make room."
+    }
+  },
+  "games": {
+    "order": {
+      "size": "Size",
+      "name": "Name",
+      "used": "Recent"
+    },
+    "stashedOf": "{{have}} of {{want}} of version {{version}} stashed",
+    "inLancache": "In lancache",
+    "prerelease": "Pre-release {{version}}",
+    "objects": "{{n}} objects",
+    "objectsShort": "{{n}} obj",
+    "depots_one": "{{count}} depot · {{objects}}",
+    "depots_other": "{{count}} depots · {{objects}}",
+    "shown_one": "{{shown}} of {{n}} game",
+    "shown_other": "{{shown}} of {{n}} games",
+    "inCache_one": "{{n}} game in the cache",
+    "inCache_other": "{{n}} games in the cache",
+    "find": "Find a {{name}} game",
+    "findPlaceholder": "Find a game…",
+    "which": "Which games",
+    "all": "All",
+    "behind": "{{n}} behind",
+    "sort": "Sort the games",
+    "noMatch": {
+      "title": "No game matches “{{typed}}”",
+      "hint": "A game is found by its name, its id or a store code."
+    },
+    "title": "Games",
+    "empty": {
+      "title": "Nothing from {{name}} in the cache yet",
+      "hint": "Games show up here once a client downloads them through lanstash; the games on your account will join them once lanstash can sign in to {{name}}."
+    },
+    "hidden": "hidden",
+    "unnamed": "no name yet",
+    "version": "Version: {{version}}",
+    "used": "Used {{ago}}",
+    "catchUp": {
+      "label": "Bring the games behind up to date",
+      "queueLabel_one": "Queue prefills of the {{n}} game behind",
+      "queueLabel_other": "Queue prefills of the {{n}} games behind",
+      "gap_one": "{{n}} game behind · about {{size}} to download",
+      "gap_other": "{{n}} games behind · about {{size}} to download",
+      "unknown": ", {{n}} not worked out yet",
+      "lancache": " · lancache's old cache first",
+      "order": "The smallest first, so games come up to date sooner; Stop on the Prefill page drops the rest."
+    },
+    "launcherData": "Launcher data"
+  },
+  "install": {
+    "title": "Download for another platform or language",
+    "platform": "Platform",
+    "help": "The platforms this game has installs for. What is not chosen here stays as set up.",
+    "architecture": "Architecture",
+    "architectureHelp": "Any: every architecture of the platform.",
+    "any": "any",
+    "language": "Language",
+    "languageHelp": "The languages this build has installs for.",
+    "asSetUp": "as set up",
+    "choose": "Choose a language",
+    "held": "{{platform}} · stashed",
+    "stashed": "{{platform}} is stashed whole",
+    "prefill": "Prefill",
+    "prefillHelp": "Fills what that platform's install takes and the stash lacks; the usual install is not changed.",
+    "start": "Prefill for {{platform}}",
+    "startLabel": "Prefill {{name}} for {{platform}}",
+    "for": "for {{install}}"
+  },
+  "game": {
+    "stash": {
+      "title": "In the stash",
+      "keep": "Keep",
+      "deleteLabel": "Delete {{name}} from the stash",
+      "deleteSize": "Delete {{size}}",
+      "askLabel": "Delete {{name}} from the stash…",
+      "ask": "Delete…",
+      "deleting": "Deleting…",
+      "asking": "Everything lanstash keeps of it goes; the next download of it comes from the internet again.",
+      "idle": "Delete it to free the space; it comes back when a client downloads it again."
+    },
+    "of": "{{have}} of {{want}}",
+    "detail": {
+      "wholeFiles": "Whole files: configs, indexes, loose ({{n}})",
+      "archives": "Inside {{archives}} archives ({{files}} files)",
+      "requests": "Requests a prefill sends",
+      "absent": "Files the CDN does not have",
+      "config": "Build config"
+    },
+    "version": "version {{version}}",
+    "planning": "working out what an install downloads…",
+    "lancacheNone": "lancache's old cache holds none of it.",
+    "lancacheSome": "lancache's old cache holds about {{share}} of it.",
+    "masked": {
+      "title": "{{game}} on {{platform}}",
+      "hint": "Its name, art and builds are hidden. Settings can show hidden games on this browser."
+    },
+    "back": "Back to {{name}}",
+    "none": {
+      "title": "Nothing called {{id}} on {{platform}}",
+      "hint": "Its page shows up once a client downloads it through lanstash.",
+      "hintWithCatalog": "Its page shows up once a client downloads it through lanstash, or once the catalog lists it."
+    },
+    "fact": {
+      "stored": "stored",
+      "objects": "objects",
+      "used": "last used",
+      "region": "region",
+      "updates": "updates",
+      "automatic": "automatic",
+      "byHand": "by hand"
+    },
+    "prerelease": "Pre-release",
+    "flavourPrerelease": "{{name}} · pre-release",
+    "noPrune": "prune is not available here",
+    "builds": {
+      "title": "Builds",
+      "note": "{{n}} on the CDN",
+      "label": "Builds of {{name}}"
+    },
+    "updates": {
+      "title": "Updates",
+      "label": "Updates of {{name}}"
+    }
+  },
+  "deleting": {
+    "title": {
+      "pruning": "Pruning · {{name}}",
+      "pruned": "Pruned · {{name}}",
+      "deleting": "Deleting · {{name}}",
+      "deleted": "Deleted · {{name}}"
+    },
+    "running": "deleting",
+    "done": "done",
+    "pieces": "pieces",
+    "for": "running",
+    "took": "took",
+    "failed": "could not be deleted"
+  },
+  "prune": {
+    "title": "Old builds",
+    "keep": "Keep",
+    "go": "Prune {{size}}",
+    "goLabel": "Prune {{name}}'s old builds",
+    "ask": "Prune…",
+    "askLabel": "Prune {{name}}'s old builds…",
+    "pruning": "Pruning…",
+    "checking": "Checking…",
+    "check": "Check",
+    "checkLabel": "Check {{name}}'s old builds",
+    "idle": "Files of builds no player gets any more: Check finds them (a minute for a large game).",
+    "nothing": "Nothing to prune: every file is needed by a current build, or was used in the last week.",
+    "found": "{{size}} in {{n}} files no current build needs, for any platform or language.",
+    "compact": "{{n}} of them also hold chunks current builds need: those are copied out first.",
+    "recent": "{{size}} more is kept for now: used in the last week."
+  },
+  "runs": {
+    "title": "Past prefills",
+    "kept": "{{n}} kept",
+    "none": {
+      "title": "No prefill ended yet",
+      "hint": "lanstash keeps each one as it ends, beyond a restart."
+    },
+    "column": {
+      "game": "Game",
+      "ended": "Ended",
+      "downloaded": "Downloaded",
+      "held": "Already held",
+      "took": "Took",
+      "when": "When"
+    },
+    "state": {
+      "done": "done",
+      "stopped": "stopped",
+      "failed": "failed",
+      "running": "running"
+    }
+  },
+  "setup": {
+    "why": "Why a PC needs setting up",
+    "lanesLabel": "How Epic's downloads reach this PC",
+    "title": "Set up a PC",
+    "os": "Operating system",
+    "on": "On {{os}}",
+    "lines": "the lines for Engine.ini",
+    "system": {
+      "windows": "a file to start Epic with",
+      "macos": "not checked on a Mac yet",
+      "linux": "Epic has no launcher here"
+    },
+    "lane": {
+      "asItComes": "As Epic comes",
+      "setUp": "Set up",
+      "pc": "This PC",
+      "cdn": "Epic's CDN",
+      "passedOn": "passed on",
+      "firstTime": "first time only",
+      "nothingKept": "nothing kept",
+      "keptForAll": "kept for every PC"
+    },
+    "windows": {
+      "label": "Set up Epic Games on Windows",
+      "download": {
+        "title": "Download it and start it once",
+        "none": "lanstash offers no file here",
+        "made": "Made by lanstash for this network",
+        "text": "The first time, Windows may ask whether to run a downloaded file: Run. It puts itself in place and makes an \"{{shortcut}}\" shortcut on the desktop and in the Start menu; pin either."
+      },
+      "shortcut": {
+        "title": "Start Epic with that shortcut from now on",
+        "text": "In place of Epic's own shortcut: it sets Epic up, then starts it, each time."
+      },
+      "runs": {
+        "title": "What it does, each start",
+        "label": "What the shortcut runs, and as whom",
+        "close": "Closes the Epic launcher, if it is running.",
+        "add": "Adds these lines to Epic's settings file:",
+        "admin": "Only where Windows refuses that: Windows asks you first, then the same lines are added, and nothing else.",
+        "start": "Starts the launcher as it always starts: never from the administrator's session."
+      },
+      "check": {
+        "title": "Check that it works",
+        "text": "Install or update any game. It shows under Activity while it downloads and under Cached once it is done. If it shows in neither, the launcher is still downloading over HTTPS."
+      }
+    },
+    "macos": {
+      "label": "Set up Epic Games on macOS",
+      "title": "Not made yet",
+      "why": "Where the Mac launcher keeps its settings file is not checked yet",
+      "text": "The same lines would go into the Mac launcher's settings file before each start:"
+    },
+    "linux": {
+      "title": "Epic has no launcher for Linux",
+      "hint": "Other launchers download Epic's games with their own downloaders; whether over HTTPS is not checked yet."
+    }
+  },
+  "account": {
+    "title": "{{name}} accounts",
+    "offered": {
+      "title": "lanstash offers no {{name}} sign-in here",
+      "hint": "The lanstash this page talks to does not sign in to it."
+    },
+    "cancel": "Cancel",
+    "add": "Add an account",
+    "addLabel": "Add a {{name}} account",
+    "signIn": "Sign in",
+    "signInLabel": "Sign lanstash in to {{name}}",
+    "asking": "Asking lanstash…",
+    "askingCode": "Asking {{name}} for a sign-in code…",
+    "qr": {
+      "alt": "QR code to sign lanstash in to {{name}}",
+      "scanned": "Scanned: approve the sign-in in the Steam mobile app.",
+      "scan": "Open the Steam mobile app of the account to add, tap the Steam Guard shield, then the QR scanner, and scan this code.",
+      "noPassword": "No password is involved; lanstash keeps only the sign-in Steam hands out."
+    },
+    "code": {
+      "label": "Sign in to {{name}}",
+      "open": {
+        "title": "Sign in on {{name}}'s own page",
+        "text": "It opens in a new tab. Sign in with the account to add; the page then shows a few lines of text with an authorizationCode in them.",
+        "link": "Open {{name}}'s sign-in page"
+      },
+      "paste": {
+        "title": "Paste the code here",
+        "text": "The code alone, or the whole page: lanstash finds the code. It works once, for a few minutes.",
+        "input": "{{name}} sign-in code",
+        "submitLabel": "Sign in to {{name}} with the code"
+      }
+    },
+    "column": {
+      "account": "Account",
+      "signIn": "Sign-in"
+    },
+    "refused": "refused: sign in again",
+    "refusedHint": "{{name}} refuses the kept sign-in: sign in with this account again",
+    "signedIn": "signed in",
+    "signOut": "Sign out",
+    "signOutLabel": "Sign {{account}} out of lanstash",
+    "none": {
+      "title": "No {{name}} account signed in",
+      "hint": "Sign in so lanstash can read what your {{name}} games need, to prefill and update them. Several accounts may be signed in: each one's games are fetched as that account."
+    },
+    "client": {
+      "title": "Sign-in client",
+      "label": "Client",
+      "ownHelp": "Set here, in place of the built-in one.",
+      "builtInHelp": "The {{name}} launcher's own client, built in. Change it only if you have another.",
+      "own": "your own",
+      "builtIn": "built in",
+      "input": "{{name}} sign-in client",
+      "placeholder": "<id>:<secret>",
+      "use": "Use it",
+      "useLabel": "Use this {{name}} client",
+      "useBuiltIn": "Use the built-in one",
+      "builtInLabel": "Use the built-in {{name}} client",
+      "another": "Use another",
+      "anotherLabel": "Use another {{name}} client"
+    }
+  },
+  "prefill": {
+    "idle": "Nothing prefilled on {{name}} yet: start one from Cached.",
+    "idleWithLibrary": "Nothing prefilled on {{name}} yet: start one from Cached or Library.",
+    "none": "No prefill yet",
+    "verb": {
+      "preload": "Pre-load",
+      "importLancache": "Import from lancache",
+      "import": "Import",
+      "prefill": "Prefill"
+    },
+    "state": {
+      "planningIndexes": "Working out the downloads: {{done}}/{{total}} indexes",
+      "planning": "Working out the downloads…",
+      "requests": "{{done}} of {{total}} requests",
+      "left": "{{left}} left · {{requests}}",
+      "done": "Done in {{took}}: {{what}}",
+      "stopped": "Stopped after {{took}}",
+      "failed": "Failed after {{took}}"
+    },
+    "took": {
+      "lancacheNone": "lancache held none of it",
+      "lancacheOnly": "took {{size}} from lancache",
+      "allStashed": "all of it was stashed already",
+      "nothing": "nothing taken",
+      "lancache": "{{size}} from lancache",
+      "cdn": "{{size}} from the CDN",
+      "stashed": "{{size}} already stashed",
+      "and": ", "
+    },
+    "reading": {
+      "network": "Network",
+      "peak": "Peak",
+      "taken": "Taken"
+    },
+    "stopLabel": "Stop {{name}}",
+    "stopAllLabel": "Stop {{name}} and forget the queue",
+    "figure": {
+      "lancache": "from lancache",
+      "cdn": "from the CDN",
+      "stashed": "already stashed",
+      "notInLancache": "not in lancache",
+      "notOnCdn": "not on the CDN",
+      "rejected": "failed their check",
+      "running": "running for",
+      "took": "took",
+      "prerelease": "pre-release",
+      "version": "version"
+    },
+    "queue": {
+      "title": "Up next",
+      "note": "in this order; Stop forgets them",
+      "empty": "Nothing waits after this one.",
+      "remove": "Remove",
+      "removeLabel": "Take {{name}} out of the queue"
+    },
+    "more": "{{verb}} · {{n}} more queued",
+    "details": "Details"
+  }
+}

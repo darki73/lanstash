@@ -1,0 +1,25 @@
+[package]
+name = "lanstash-app"
+description = "lanstash application layer: the generic use cases, over the ports."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-domain = { path = "../domain" }
+lanstash-ports = { path = "../ports" }
+lanstash-store = { path = "../store" }
+
+[dev-dependencies]
+# The integration tests in tests/ use the in-memory doubles.
+lanstash-app = { path = ".", features = ["test-support"] }
+lanstash-store = { path = "../store", features = ["test-support"] }
+
+[features]
+# A scripted origin and a capturing response sink for tests of this and other crates.
+test-support = []
+
+[lints]
+workspace = true

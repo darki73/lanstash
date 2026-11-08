@@ -1,0 +1,42 @@
+# The documentation site (site/) on GitHub Pages: built with Zensical at the locked versions
+# (site/uv.lock) on every push to main that changes it, and published. In the repository's settings,
+# Pages takes its source from GitHub Actions.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths: ["site/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: uv
+        run: pipx install uv==0.10.6
+      - name: "Build (strict: a broken link fails it)"
+        run: uv run --project site --locked zensical build --strict -f site/mkdocs.yml
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

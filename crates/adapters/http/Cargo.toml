@@ -1,0 +1,28 @@
+[package]
+name = "lanstash-adapter-http"
+description = "lanstash adapter: the HTTP server, the HTTP client to the origins, and the HTTPS passthrough."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-adapter-dns = { path = "../dns" }
+lanstash-adapter-zerocopy = { path = "../zerocopy" }
+lanstash-app = { path = "../../app" }
+lanstash-domain = { path = "../../domain" }
+lanstash-ports = { path = "../../ports" }
+# For HTTPS to web APIs on the network (a DNS server's admin API); the same versions the Steam
+# adapter uses. rustls: Apache-2.0 OR ISC OR MIT. webpki-roots: CDLA-Permissive-2.0. ring
+# (a pinned certificate's SHA-256): Apache-2.0 AND ISC.
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std", "tls12"] }
+webpki-roots = "=1.0.11"
+ring = "=0.17.14"
+
+[dev-dependencies]
+# A certificate made the way the composition makes one, for the HTTPS tests.
+lanstash-adapter-crypto = { path = "../crypto" }
+
+[lints]
+workspace = true

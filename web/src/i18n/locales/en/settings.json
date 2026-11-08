@@ -1,0 +1,107 @@
+{
+  "title": "Settings",
+  "subtitle": {
+    "short": "What lanstash does, changed here",
+    "full": "What lanstash does, changed here; where it listens and what it stores stay in its configuration file"
+  },
+  "asking": "Asking lanstash…",
+  "none": "No settings",
+  "signIn": "Shown only: changing settings needs an account that may change them",
+  "source": {
+    "flag": "command-line flag",
+    "ui": "changed here",
+    "config": "config file",
+    "default": "default"
+  },
+  "row": {
+    "value": "{{label}} value",
+    "part": "{{label}}: {{part}}",
+    "save": "Save",
+    "saveLabel": "Save {{label}}",
+    "reset": "Reset",
+    "resetLabel": "Reset {{label}} to the config file's value"
+  },
+  "setting": {
+    "auto_update": {
+      "label": "Automatic updates",
+      "help": "Games once held whole are queued for their new builds: always, in a daily window (HH:MM-HH:MM, UTC), or off."
+    },
+    "prefill_parallel": {
+      "label": "Prefill requests at once",
+      "help": "How many requests a prefill keeps in flight (1 to 64)."
+    },
+    "steam_os": {
+      "label": "Operating system",
+      "help": "Who a Steam install is for: prefills, builds and sizes follow it."
+    },
+    "steam_language": {
+      "label": "Languages",
+      "help": "The languages your PCs play in: an install takes each one's files, so none is fetched from the internet."
+    },
+    "steam_arch": {
+      "label": "Architecture",
+      "help": "64 or 32 bit."
+    },
+    "blizzard_region": {
+      "label": "Region",
+      "help": "The region whose current builds count."
+    },
+    "blizzard_tags": {
+      "label": "Install tags",
+      "help": "What a Battle.net install is (platform, architecture, locale, optional content), comma-separated."
+    },
+    "max_size": {
+      "label": "Size limit",
+      "help": "The most the stash may hold (8000G, 2T); eviction makes room beyond it. Empty: no limit."
+    },
+    "keep_free": {
+      "label": "Keep free",
+      "help": "Space eviction keeps free on the disk (30%, 500G)."
+    },
+    "verify_every": {
+      "label": "Check stored bytes",
+      "help": "Reads every stored byte against its checksum in the background, paced, and reports damage: weekly, monthly, every <n>d, or off."
+    },
+    "verify_rate": {
+      "label": "Check speed",
+      "help": "The most the check reads a second (20M, 50M, 100M), so clients keep the disks."
+    }
+  },
+  "group": {
+    "Updates": "Updates",
+    "Steam": "Steam",
+    "Storage": "Storage"
+  },
+  "part": {
+    "Platform": "Platform",
+    "Bitness": "Bitness",
+    "Language": "Language"
+  },
+  "choice": {
+    "always": "always",
+    "off": "off",
+    "weekly": "weekly",
+    "monthly": "monthly",
+    "window": "window",
+    "other": "other",
+    "every": "every"
+  },
+  "hint": {
+    "auto_update": "HH:MM-HH:MM, UTC",
+    "prefill_parallel": "1 to 64",
+    "verify_every": "<n>d, 1 to 365 days",
+    "verify_rate": "a size a second, 1M or more"
+  },
+  "restart": {
+    "label": "Apply the changes",
+    "anyway": "Restart anyway",
+    "restartingLabel": "lanstash is restarting",
+    "restarting": "Restarting…",
+    "go": "Restart",
+    "goLabel": "Restart lanstash to apply the changes",
+    "back": "lanstash is restarting; it is back in a few seconds and this page with it.",
+    "applies": "Changes apply when lanstash restarts: a few seconds; prefills and downloads are cut off.",
+    "notNow": "Not now: {{why}}.",
+    "atWork": "lanstash is at work"
+  }
+}

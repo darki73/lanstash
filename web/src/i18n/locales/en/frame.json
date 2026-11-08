@@ -1,0 +1,53 @@
+{
+  "tagline": "game download cache",
+  "description": "lanstash keeps the games your network downloads, so every other PC gets them at LAN speed: what it holds, who downloads what, and what is up to date.",
+  "nav": {
+    "overview": "Overview",
+    "settings": "Settings",
+    "clients": "Clients",
+    "history": "History",
+    "dns": "DNS",
+    "health": "Health",
+    "accounts": "Accounts",
+    "platforms": "Platforms"
+  },
+  "page": {
+    "settings": "Settings",
+    "dns": "DNS",
+    "history": "History",
+    "health": "Health",
+    "clients": "Clients",
+    "sign-in": "Sign in",
+    "join": "Join",
+    "account": "Your account",
+    "accounts": "Accounts"
+  },
+  "connection": {
+    "connecting": "connecting…",
+    "live": "live",
+    "reconnecting": "reconnecting…"
+  },
+  "uptime": "up {{h}}h {{mm}}m {{ss}}s",
+  "version": "lanstash {{version}}",
+  "update": "update available: {{version}}",
+  "loading": "Loading the page…",
+  "waiting": {
+    "title": "Waiting for the first snapshot…",
+    "hint": "lanstash sends one a second on its admin port."
+  },
+  "title": {
+    "page": "{{page}} · lanstash",
+    "busy": "{{activity}} · {{page}} · lanstash",
+    "fetching": "↓ {{rate}} MB/s",
+    "serving": "↑ {{rate}} MB/s"
+  },
+  "language": "Language",
+  "clientsClosed": {
+    "title": "Sign in to see who downloads what",
+    "hint": "The overview shows the traffic; which PC got which game is for accounts."
+  },
+  "dnsClosed": {
+    "title": "The DNS server is for whoever sets it up",
+    "hint": "Sign in with an account that may manage DNS to see and change its setup."
+  }
+}

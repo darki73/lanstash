@@ -1,0 +1,16 @@
+[package]
+name = "lanstash-adapter-logs"
+description = "lanstash adapter: the event log and the access log, in rotating files."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-adapter-http = { path = "../http" }
+lanstash-domain = { path = "../../domain" }
+lanstash-ports = { path = "../../ports" }
+
+[lints]
+workspace = true

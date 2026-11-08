@@ -1,0 +1,14 @@
+[package]
+name = "lanstash-ports"
+description = "lanstash ports: the traits the use cases need from the outside world, and the platform contract."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-domain = { path = "../domain" }
+
+[lints]
+workspace = true

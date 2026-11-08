@@ -1,0 +1,20 @@
+{
+  "title": "Health",
+  "subtitle": "What lanstash checks of itself: the store, open files, free space, the background check",
+  "level": {
+    "ok": "ok",
+    "warn": "warning",
+    "fail": "failure"
+  },
+  "summary": {
+    "ok": "all good",
+    "warn": "something to look at",
+    "fail": "something is wrong"
+  },
+  "checks": "Checks",
+  "asking": "Asking lanstash…",
+  "none": {
+    "title": "No health checks",
+    "hint": "This lanstash does not make them, or could not be reached."
+  }
+}

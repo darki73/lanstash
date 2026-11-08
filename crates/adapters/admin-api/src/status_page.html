@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lanstash status</title>
+<style>
+  :root {
+    --bg: #f7f7f8; --card: #fff; --text: #1d1d1f; --muted: #6e6e73; --line: #e5e5ea;
+    --accent: #0a84ff; --good: #30a46c; --bad: #e5484d; --bar: #dbe9ff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #111113; --card: #1c1c1f; --text: #ededf0; --muted: #9a9aa2; --line: #2c2c31;
+            --accent: #4ea1ff; --good: #3dd68c; --bad: #ff6369; --bar: #1d3557; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--text);
+         font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  h1 { font-size: 20px; margin: 0; }
+  .muted { color: var(--muted); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--bad); margin-right: 6px; }
+  .live .dot { background: var(--good); }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .kpi, section { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+  .kpi .v { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .kpi .l { color: var(--muted); font-size: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; margin-bottom: 10px; }
+  section { overflow-x: auto; margin-bottom: 10px; }
+  h2 { font-size: 14px; margin: 0 0 8px; }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  td, th { padding: 3px 6px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+  td:first-child, th:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 500; }
+  tr.svc td { font-weight: 600; }
+  .key { font-family: ui-monospace, Consolas, monospace; font-size: 12px; white-space: normal; word-break: break-all; }
+  .bar { position: relative; min-width: 90px; }
+  .bar span { position: absolute; inset: 2px auto 2px 0; background: var(--bar); border-radius: 3px; }
+  .bar b { position: relative; font-weight: 400; }
+  tr.grp { cursor: pointer; }
+  tr.grp:hover td { background: var(--bg); }
+  .tog { color: var(--accent); }
+  tr.piece td { color: var(--muted); font-size: 12px; border-bottom-style: dashed; }
+</style>
+</head>
+<body>
+<header>
+  <h1>lanstash</h1>
+  <span id="conn"><span class="dot"></span><span id="state">connecting…</span></span>
+  <span class="muted" id="uptime"></span>
+</header>
+<div class="kpis" id="kpis"></div>
+<section><h2 id="dl-title">Downloads in flight</h2><div id="downloads"></div></section>
+<div class="grid" id="counters"></div>
+<section><h2 id="stored-title">Stored</h2><div id="stored"></div></section>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const gb = (b) => (b / 1e9).toFixed(2) + " GB";
+const mb = (b) => (b / 1e6).toFixed(1) + " MB";
+const size = (b) => (b < 1e6 ? (b / 1e3).toFixed(0) + " KB" : mb(b));
+const rate = (r) => (r === undefined ? "–" : r.toFixed(1) + " MB/s");
+const num = (n) => n.toLocaleString("en-US");
+const get = (s, g, n) => (s.counters[g] || {})[n] || 0;
+
+function uptime(ms) {
+  const t = Math.floor(ms / 1000), h = Math.floor(t / 3600), m = Math.floor(t / 60) % 60, s = t % 60;
+  return "up " + h + "h " + String(m).padStart(2, "0") + "m " + String(s).padStart(2, "0") + "s";
+}
+
+// Objects whose pieces are shown (clicked open); kept across snapshots.
+const expanded = new Set();
+
+// Bytes done and to do of one piece; null when its end is unknown.
+function pieceProgress(d) {
+  if (!d.span || d.span[1] === null) return null;
+  const len = d.span[1] - d.span[0];
+  return { done: Math.min(len, Math.max(0, d.received - d.span[0])), len };
+}
+
+function bar(done, len, label) {
+  const pct = len > 0 ? Math.min(100, 100 * done / len) : 100;
+  return `<td class="bar"><span style="width:${pct}%"></span><b>${esc(label ?? pct.toFixed(0) + " %")}</b></td>`;
+}
+
+// One row per object; its parallel pieces (16 MiB each, fetched side by side)
+// are summed into one range and one progress bar, listed when clicked open.
+function renderDownloads(list) {
+  const groups = new Map();
+  for (const d of list) {
+    if (!groups.has(d.key)) groups.set(d.key, []);
+    groups.get(d.key).push(d);
+  }
+  for (const k of [...expanded]) if (!groups.has(k)) expanded.delete(k);
+  const pieces = list.length === groups.size ? "" : `, ${list.length} pieces`;
+  $("dl-title").textContent = `Downloads in flight (${groups.size} object${groups.size === 1 ? "" : "s"}${pieces})`;
+  if (groups.size === 0) { $("downloads").innerHTML = '<span class="muted">none</span>'; return; }
+
+  let rows = "";
+  for (const [key, ds] of [...groups].slice(0, 200)) {
+    ds.sort((a, b) => (a.span ? a.span[0] : 0) - (b.span ? b.span[0] : 0));
+    const prog = ds.map(pieceProgress);
+    const total = ds[0].total === null ? "?" : mb(ds[0].total);
+    const n = ds.length, open = expanded.has(key);
+    let range, cell;
+    if (prog.some((p) => p === null)) {
+      range = "whole";
+      cell = bar(0, 0, mb(ds.reduce((a, d) => a + d.received, 0)));
+    } else {
+      const from = ds[0].span[0], to = Math.max(...ds.map((d) => d.span[1]));
+      // "at 252.7 MB, 48 KB": a small range of a large archive stays readable.
+      range = n === 1 ? "at " + mb(from) + ", " + size(to - from) : mb(from) + " – " + mb(to);
+      cell = bar(prog.reduce((a, p) => a + p.done, 0), prog.reduce((a, p) => a + p.len, 0));
+    }
+    const toggle = n > 1 ? `<span class="tog">${open ? "▾" : "▸"} ${n} pieces</span>` : "";
+    rows += `<tr class="${n > 1 ? "grp" : ""}" data-key="${esc(key)}"><td class="key">${esc(key)}</td>` +
+      `<td>${esc(range)}</td><td>${toggle}</td>${cell}<td>${total}</td></tr>`;
+    if (open && n > 1) {
+      ds.forEach((d, i) => {
+        const p = prog[i];
+        rows += `<tr class="piece"><td></td><td>at ${mb(d.span[0])}, ${size(p.len)}</td><td></td>` +
+          `${bar(p.done, p.len)}<td></td></tr>`;
+      });
+    }
+  }
+  $("downloads").innerHTML =
+    "<table><tr><th>object</th><th>range</th><th></th><th>progress</th><th>size</th></tr>" + rows + "</table>";
+}
+
+function render(s) {
+  const r = s.rates_mb_s;
+  $("uptime").textContent = uptime(s.now_ms - s.started_ms);
+  const reqs = get(s, "requests", "hits") + get(s, "requests", "misses");
+  const hitPct = reqs ? (100 * get(s, "requests", "hits") / reqs).toFixed(1) + " %" : "–";
+  const kpis = [
+    ["to clients from cache", rate(r["requests.hit_bytes"])],
+    ["to clients, downloading", rate(r["requests.miss_bytes"])],
+    ["from the internet", rate(r["downloads.fetched_bytes"])],
+    ["downloads in flight", num(s.downloads.length)],
+    ["hit rate (objects)", hitPct],
+    ["https connections", num(get(s, "https", "active"))],
+  ];
+  $("kpis").innerHTML = kpis.map(([l, v]) => `<div class="kpi"><div class="v">${esc(v)}</div><div class="l">${esc(l)}</div></div>`).join("");
+
+  renderDownloads(s.downloads);
+
+  $("counters").innerHTML = Object.entries(s.counters).map(([g, vals]) =>
+    `<section><h2>${esc(g)}</h2><table>` +
+    Object.entries(vals).map(([n, v]) => {
+      const bytes = n.includes("bytes");
+      const rr = r[g + "." + n];
+      return `<tr><td>${esc(n.replace(/_/g, " "))}</td><td>${bytes ? gb(v) : num(v)}</td><td class="muted">${bytes ? rate(rr) : ""}</td></tr>`;
+    }).join("") + "</table></section>").join("");
+
+  const services = {};
+  for (const u of s.usage) {
+    (services[u.service] = services[u.service] || { objects: 0, bytes: 0, games: [] });
+    services[u.service].objects += u.objects;
+    services[u.service].bytes += u.bytes;
+    services[u.service].games.push(u);
+  }
+  const age = Math.round((s.now_ms - s.usage_ms) / 1000);
+  $("stored-title").textContent = `Stored (updated ${age} s ago)`;
+  const rows = Object.entries(services).map(([name, t]) =>
+    `<tr class="svc"><td>${esc(name)}</td><td>${num(t.objects)}</td><td>${gb(t.bytes)}</td></tr>` +
+    t.games.map((g) => `<tr><td>&nbsp;&nbsp;${g.name ? esc(g.name) + ' <span class="muted">' + esc(g.game) + "</span>" : esc(g.game)}</td><td>${num(g.objects)}</td><td>${gb(g.bytes)}</td></tr>`).join(""));
+  $("stored").innerHTML = rows.length === 0 ? '<span class="muted">nothing yet</span>' :
+    "<table><tr><th>service / game</th><th>objects</th><th>size</th></tr>" + rows.join("") + "</table>";
+}
+
+function connect() {
+  const es = new EventSource("api/v1/events");
+  es.onopen = () => { $("conn").className = "live"; $("state").textContent = "live"; };
+  es.onmessage = (e) => { last = JSON.parse(e.data); render(last); };
+  es.onerror = () => { $("conn").className = ""; $("state").textContent = "reconnecting…"; };
+}
+$("downloads").addEventListener("click", (e) => {
+  const row = e.target.closest("tr.grp");
+  if (!row) return;
+  const k = row.dataset.key;
+  expanded.has(k) ? expanded.delete(k) : expanded.add(k);
+  if (last) renderDownloads(last.downloads);
+});
+let last = null;
+connect();
+</script>
+</body>
+</html>

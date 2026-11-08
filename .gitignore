@@ -1,0 +1,9 @@
+/target
+*.lcseg
+/web/node_modules
+/web/dist
+/web/.env.local
+/site/build
+/site/.venv
+# Notes of one installation (its deploy log, working plans): kept beside the code, never published.
+/private

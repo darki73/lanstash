@@ -1,0 +1,14 @@
+# The documentation site (GitHub Pages). Built only, never part of lanstash:
+#   uv run --project site zensical serve -f site/mkdocs.yml   # preview on http://127.0.0.1:8000
+#   uv run --project site zensical build -s -f site/mkdocs.yml   # into site/build
+# Zensical and zensical-ui are MIT; their helpers (Markdown, pymdown-extensions, Jinja2, Pygments, ...)
+# BSD or MIT. Zensical reads the MkDocs Material configuration in mkdocs.yml as it is.
+[project]
+name = "lanstash-site"
+version = "0.1.0"
+description = "The lanstash documentation site"
+requires-python = ">=3.12"
+dependencies = ["zensical==0.1.0"]
+
+[tool.uv]
+package = false

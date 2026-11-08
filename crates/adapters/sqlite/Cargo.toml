@@ -1,0 +1,17 @@
+[package]
+name = "lanstash-adapter-sqlite"
+description = "lanstash adapter: what lanstash keeps beyond a restart (the build history, counters over time, prefill runs) in one SQLite database."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-ports = { path = "../../ports" }
+# SQLite, compiled in (bundled: the C source is built with the crate; no system library needed).
+# rusqlite: MIT; SQLite itself: public domain.
+rusqlite = { version = "=0.40.2", default-features = false, features = ["bundled"] }
+
+[lints]
+workspace = true

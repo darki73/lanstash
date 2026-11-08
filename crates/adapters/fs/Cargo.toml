@@ -1,0 +1,20 @@
+[package]
+name = "lanstash-adapter-fs"
+description = "lanstash adapter: the storage ports over the real file system, free space, and lancache's nginx cache directory."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-adapter-os = { path = "../os" }
+lanstash-domain = { path = "../../domain" }
+lanstash-ports = { path = "../../ports" }
+
+[dev-dependencies]
+# A store over the real file system, as the service opens it.
+lanstash-store = { path = "../../store" }
+
+[lints]
+workspace = true

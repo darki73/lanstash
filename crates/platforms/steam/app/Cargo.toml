@@ -1,0 +1,23 @@
+[package]
+name = "lanstash-steam-app"
+description = "lanstash's Steam use cases: the CM connection, logging in once (password, Steam Guard) and logging on with the kept token, over the ports."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-app = { path = "../../../app" }
+lanstash-domain = { path = "../../../domain" }
+lanstash-ports = { path = "../../../ports" }
+lanstash-steam-domain = { path = "../domain" }
+lanstash-store = { path = "../../../store" }
+
+[dev-dependencies]
+# The tests use the fake upstream.
+lanstash-app = { path = "../../../app", features = ["test-support"] }
+lanstash-store = { path = "../../../store", features = ["test-support"] }
+
+[lints]
+workspace = true

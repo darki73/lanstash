@@ -1,0 +1,91 @@
+site_name: lanstash
+site_description: A caching proxy for game downloads on a LAN, built for network storage.
+docs_dir: docs
+site_dir: build
+site_url: https://darki73.github.io/lanstash/
+repo_url: https://github.com/darki73/lanstash
+repo_name: darki73/lanstash
+edit_uri: ""
+copyright: lanstash is Apache-2.0. Platform marks belong to their owners; game art in screenshots to its publishers.
+
+theme:
+  name: material
+  # System fonts: the site asks no third party for anything.
+  font: false
+  logo: assets/icon.svg
+  favicon: assets/favicon.svg
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Light theme
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Dark theme
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+
+extra_css:
+  - assets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - getting-started/index.md
+      - Install: getting-started/install.md
+      - Configure: getting-started/configure.md
+      - DNS: getting-started/dns.md
+      - First steps: getting-started/first-steps.md
+  - Guide:
+      - guide/index.md
+      - Overview: guide/overview.md
+      - Platforms and games: guide/platforms.md
+      - Prefill: guide/prefill.md
+      - Clients: guide/clients.md
+      - History: guide/history.md
+      - Accounts: guide/accounts.md
+      - Hidden and private games: guide/privacy.md
+      - Health and checks: guide/health.md
+  - Reference:
+      - reference/index.md
+      - Command line: reference/cli.md
+      - Configuration: reference/configuration.md
+      - API: reference/api.md
+  - Known limits: known-limits.md

@@ -1,0 +1,294 @@
+{
+  "resource": {
+    "throughput": "Трафик",
+    "downloads": "Загрузки",
+    "requests": "Запросы",
+    "storage": "Хранилище",
+    "connections": "Соединения"
+  },
+  "resources": "Ресурсы",
+  "range": {
+    "label": "Период",
+    "option": {
+      "day": "День",
+      "week": "Неделя",
+      "month": "Месяц"
+    },
+    "span": {
+      "day": "24 часа",
+      "week": "7 дней",
+      "month": "30 дней"
+    },
+    "per": {
+      "minutes_one": "{{count}} мин",
+      "minutes_few": "{{count}} мин",
+      "minutes_many": "{{count}} мин",
+      "minutes_other": "{{count}} мин",
+      "hours_one": "{{count}} ч",
+      "hours_few": "{{count}} ч",
+      "hours_many": "{{count}} ч",
+      "hours_other": "{{count}} ч"
+    },
+    "last": "за последние {{range}}",
+    "lastTitle": "За последние {{range}}"
+  },
+  "date": {
+    "day": "{{day}} {{month}} {{year}}",
+    "month": {
+      "jan": "янв",
+      "feb": "фев",
+      "mar": "мар",
+      "apr": "апр",
+      "may": "мая",
+      "jun": "июн",
+      "jul": "июл",
+      "aug": "авг",
+      "sep": "сен",
+      "oct": "окт",
+      "nov": "ноя",
+      "dec": "дек"
+    }
+  },
+  "pulse": {
+    "serving_one": "Раздача: {{n}} клиент · {{rate}} MB/s",
+    "serving_few": "Раздача: {{n}} клиента · {{rate}} MB/s",
+    "serving_many": "Раздача: {{n}} клиентов · {{rate}} MB/s",
+    "serving_other": "Раздача: {{n}} клиента · {{rate}} MB/s",
+    "downloading_one": "Загрузка: {{n}} объект",
+    "downloading_few": "Загрузка: {{n}} объекта",
+    "downloading_many": "Загрузка: {{n}} объектов",
+    "downloading_other": "Загрузка: {{n}} объекта",
+    "prefilling_one": "Предзагрузка: {{n}} игра",
+    "prefilling_few": "Предзагрузка: {{n}} игры",
+    "prefilling_many": "Предзагрузка: {{n}} игр",
+    "prefilling_other": "Предзагрузка: {{n}} игры",
+    "idle": "Простой",
+    "failing_one": "{{n}} проверка не проходит",
+    "failing_few": "{{n}} проверки не проходят",
+    "failing_many": "{{n}} проверок не проходят",
+    "failing_other": "{{n}} проверки не проходят",
+    "warnings_one": "{{n}} предупреждение",
+    "warnings_few": "{{n}} предупреждения",
+    "warnings_many": "{{n}} предупреждений",
+    "warnings_other": "{{n}} предупреждения",
+    "pass": "все проверки пройдены",
+    "noTraffic": "нет трафика клиентов за последние {{range}}",
+    "lastGot": "клиенты последний раз получали данные {{ago}}"
+  },
+  "monitor": {
+    "live": "Сейчас",
+    "reading": "Читаю сохранённые данные lanstash…",
+    "nothingKept": {
+      "title": "Нет сохранённой истории",
+      "hint": "Пока lanstash работает, он сохраняет счётчики каждую минуту."
+    },
+    "chart": "{{label}} за {{bucket}}, последние {{range}}",
+    "scale": "{{value}} за {{bucket}}",
+    "scaleCut": "{{top}} · пики до {{highest}} обрезаны",
+    "allCounters": "Все счётчики"
+  },
+  "counters": {
+    "counter": "счётчик",
+    "overRange": "за период",
+    "sinceStart": "с запуска",
+    "now": "сейчас"
+  },
+  "throughput": {
+    "tile": {
+      "value": "{{size}} отдано",
+      "detail": "сейчас {{rate}}",
+      "chart": "байты клиентам"
+    },
+    "subtitle": "Байты клиентам в сети и из интернета",
+    "live": "MB/s клиентам и из интернета",
+    "kept": "Байты клиентам и из интернета",
+    "fromCache": "Клиентам из кэша",
+    "downloading": "Клиентам во время загрузки",
+    "fromInternet": "Из интернета",
+    "peak": "Пик к клиентам",
+    "servedFromCache": "Отдано из кэша"
+  },
+  "downloads": {
+    "tile": {
+      "value": "{{n}} готово",
+      "detail": "{{inFlight}} в процессе · {{failed}} с ошибкой",
+      "chart": "начатые загрузки"
+    },
+    "subtitle": "Объекты, которые lanstash загружает из интернета",
+    "live": "объекты в процессе",
+    "scale": "объектов: {{n}}",
+    "inFlight": "В процессе",
+    "pieces": "Части",
+    "kept": "Начатые и неудачные загрузки",
+    "started": "Начато",
+    "completed": "Завершено",
+    "failed": "С ошибкой",
+    "joined": "Присоединились",
+    "crcMismatch": "Несовпадения CRC",
+    "storeErrors": "Ошибки хранилища",
+    "rangeIgnored": "Диапазон не учтён",
+    "upstream4xx": "Источник 4xx",
+    "upstream5xx": "Источник 5xx",
+    "timeouts": "Тайм-ауты",
+    "firstByte": "Время до первого байта",
+    "ms": "{{ms}} ms",
+    "list": {
+      "objects_one": "{{count}} объект",
+      "objects_few": "{{count}} объекта",
+      "objects_many": "{{count}} объектов",
+      "objects_other": "{{count}} объекта",
+      "objectsInPieces_one": "{{count}} объект, частей: {{pieces}}",
+      "objectsInPieces_few": "{{count}} объекта, частей: {{pieces}}",
+      "objectsInPieces_many": "{{count}} объектов, частей: {{pieces}}",
+      "objectsInPieces_other": "{{count}} объекта, частей: {{pieces}}",
+      "empty": {
+        "title": "Ничего не загружается",
+        "hint": "Здесь видны объекты, пока lanstash загружает то, чего у него ещё нет."
+      },
+      "column": {
+        "object": "объект",
+        "range": "диапазон",
+        "pieces": "части",
+        "progress": "прогресс",
+        "size": "размер"
+      },
+      "whole": "целиком",
+      "at": "с {{from}}, {{size}}",
+      "span": "{{from}} – {{to}}",
+      "pieces": "частей: {{n}}"
+    }
+  },
+  "requests": {
+    "tile": {
+      "value": "{{rate}} попаданий",
+      "detail": "запросов: {{n}}",
+      "chart": "запросы"
+    },
+    "subtitle": "Что запрашивают клиенты и какая часть приходит из кэша",
+    "live": "запросы и попадания в секунду",
+    "requestsNow": "Запросы сейчас",
+    "hitsNow": "Попадания сейчас",
+    "kept": "Запросы и попадания",
+    "hitRate": "Доля попаданий",
+    "requests": "Запросы",
+    "hits": "Попадания",
+    "misses": "Промахи",
+    "partial": "Частичные",
+    "retries": "Повторы",
+    "errors": "Ошибки",
+    "refused": "Отклонено",
+    "aborted": "Прервано клиентом",
+    "sendfile": "Отправлено из файла"
+  },
+  "storage": {
+    "tile": {
+      "entries": "записей: {{n}}",
+      "free": "{{size}} свободно",
+      "chart": "байты, записанные в хранилище"
+    },
+    "subtitle": "Что лежит в хранилище и что в него записывается",
+    "live": "MB/s записи в хранилище и освобождения вытеснением",
+    "writing": "Запись",
+    "freeing": "Освобождение",
+    "howFull": "Заполненность",
+    "kept": "Записанные байты и освобождённые вытеснением",
+    "written": "Записано",
+    "evicted": "Вытеснено",
+    "storedNow": "Хранится сейчас",
+    "freeNow": "Свободно сейчас",
+    "segmentsEvicted": "Вытеснено сегментов",
+    "filesEvicted": "Вытеснено файлов",
+    "journalsCompacted": "Сжато журналов",
+    "evictionFailures": "Сбои вытеснения",
+    "check": {
+      "checking": "проверка · {{percent}} %",
+      "checked": "проверено {{day}}",
+      "notYet": "ещё не проверено",
+      "withinMinutes": "в ближайшие минуты",
+      "label": "Проверка хранилища",
+      "read": "Прочитано",
+      "next": "Следующая проверка",
+      "progress": "{{done}} из {{all}}",
+      "damage": "Найдены повреждения",
+      "damaged_one": "Повреждено записей или файлов: {{n}}, они указаны в журнале lanstash",
+      "damaged_few": "Повреждено записей или файлов: {{n}}, они указаны в журнале lanstash",
+      "damaged_many": "Повреждено записей или файлов: {{n}}, они указаны в журнале lanstash",
+      "damaged_other": "Повреждено записей или файлов: {{n}}, они указаны в журнале lanstash"
+    }
+  },
+  "connections": {
+    "tile": {
+      "value": "{{n}} https",
+      "detail": "открыто сейчас: {{n}}",
+      "chart": "https-соединения"
+    },
+    "subtitle": "HTTPS, переданный источнику, и запросы к хостам, которые lanstash не кэширует",
+    "live": "открытые https-соединения, запросы напрямую в секунду",
+    "httpsOpen": "HTTPS открыто",
+    "passThroughNow": "Напрямую сейчас",
+    "kept": "HTTPS-соединения и запросы напрямую",
+    "httpsConnections": "HTTPS-соединения",
+    "passThroughRequests": "Запросы напрямую",
+    "passedThrough": "Передано напрямую",
+    "relayed": "Переслано",
+    "refused": "Отклонено",
+    "badHello": "Неверный hello",
+    "connectFailed": "Сбой подключения"
+  },
+  "home": {
+    "now": {
+      "title": "Загружается сейчас",
+      "games_one": "{{n}} игра",
+      "games_few": "{{n}} игры",
+      "games_many": "{{n}} игр",
+      "games_other": "{{n}} игры",
+      "clients": "Клиенты",
+      "soFar": "уже {{size}}"
+    },
+    "traffic": "Трафик"
+  },
+  "lifetime": {
+    "label": "Что сделал lanstash",
+    "besides": "Предзагрузка, обновления, упреждающее чтение",
+    "fromStashSinceStart": "Из хранилища с запуска lanstash",
+    "fromStashSinceDay": "Из хранилища с {{day}}",
+    "captionRange": "клиенты получили из хранилища за последние {{range}}, а не из интернета",
+    "captionSinceStart": "клиенты получили из хранилища с запуска lanstash, а не из интернета",
+    "captionSinceDay": "клиенты получили из хранилища с {{day}}, а не из интернета",
+    "fromStash": "из хранилища",
+    "fromInternet": "из интернета"
+  },
+  "stash": {
+    "title": "Хранилище",
+    "games_one": "{{n}} игра",
+    "games_few": "{{n}} игры",
+    "games_many": "{{n}} игр",
+    "games_other": "{{n}} игры",
+    "gamesLauncher_one": "{{n}} игра · {{size}} данных лаунчера",
+    "gamesLauncher_few": "{{n}} игры · {{size}} данных лаунчера",
+    "gamesLauncher_many": "{{n}} игр · {{size}} данных лаунчера",
+    "gamesLauncher_other": "{{n}} игры · {{size}} данных лаунчера",
+    "empty": {
+      "title": "Пока ничего не сохранено",
+      "hint": "Игры появятся здесь, когда клиент загрузит их через lanstash."
+    },
+    "largest": "Самые большие игры",
+    "shownOf": "{{shown}} из {{all}}",
+    "allByPlatform": "Все игры по платформам",
+    "library": "Библиотека",
+    "allOn": "Все игры {{platform}}: {{n}}",
+    "fullness": {
+      "label": "Заполненность хранилища",
+      "stored": "{{size}} занято",
+      "free": "{{free}} свободно из {{whole}}"
+    }
+  },
+  "traffic": {
+    "title": "Больше всего отдано",
+    "empty": {
+      "title": "Ничего не отдано",
+      "hint": "За последние {{range}} клиенты не загружали игр."
+    },
+    "games": "Игры"
+  }
+}

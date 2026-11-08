@@ -1,0 +1,13 @@
+[package]
+name = "lanstash-domain"
+description = "lanstash domain: segment format, keys, policies. Pure logic, no I/O (no_std + alloc)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+
+[lints]
+workspace = true

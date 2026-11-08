@@ -1,0 +1,21 @@
+[package]
+name = "lanstash-battlenet-api"
+description = "lanstash's Battle.net platform: the platform contract over the Battle.net use cases, and the JSON of its views."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-battlenet-app = { path = "../app" }
+lanstash-battlenet-domain = { path = "../domain" }
+lanstash-domain = { path = "../../../domain" }
+lanstash-ports = { path = "../../../ports" }
+
+[dev-dependencies]
+lanstash-app = { path = "../../../app", features = ["test-support"] }
+lanstash-store = { path = "../../../store", features = ["test-support"] }
+
+[lints]
+workspace = true

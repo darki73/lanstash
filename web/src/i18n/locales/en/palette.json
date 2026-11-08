@@ -1,0 +1,13 @@
+{
+  "label": "Go to",
+  "placeholder": "Find a game or a page…",
+  "none": "No game or page answers that.",
+  "group": {
+    "recent": "Used last",
+    "pages": "Pages",
+    "games": "Games",
+    "library": "Library"
+  },
+  "notCached": "{{platform}} · not cached",
+  "part": "{{platform}} {{part}}"
+}

@@ -1,0 +1,13 @@
+[package]
+name = "lanstash-architecture"
+description = "Architecture rules for the lanstash workspace and the tests that enforce them."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+
+[lints]
+workspace = true

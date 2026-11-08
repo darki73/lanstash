@@ -1,0 +1,22 @@
+[package]
+name = "lanstash-adapter-zerocopy"
+description = "lanstash adapter: sending a file's bytes to a socket without copying them through lanstash."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[target.'cfg(target_os = "linux")'.dependencies]
+# libc: MIT OR Apache-2.0; already in the lock (ring's and getrandom's). For sendfile(2) alone.
+libc = "0.2"
+
+# Not the workspace's lints: they forbid `unsafe`, which no item could lift. The same, but
+# `unsafe` denied: the one function that calls sendfile(2) allows it (`lanstash-architecture`
+# lets this crate, and that one file, hold it).
+[lints.rust]
+unsafe_code = "deny"
+missing_debug_implementations = "warn"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }

@@ -1,0 +1,268 @@
+{
+  "resource": {
+    "throughput": "Throughput",
+    "downloads": "Downloads",
+    "requests": "Requests",
+    "storage": "Storage",
+    "connections": "Connections"
+  },
+  "resources": "Resources",
+  "range": {
+    "label": "Range",
+    "option": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month"
+    },
+    "span": {
+      "day": "24 hours",
+      "week": "7 days",
+      "month": "30 days"
+    },
+    "per": {
+      "minutes_one": "{{count}} min",
+      "minutes_other": "{{count}} min",
+      "hours_one": "{{count}} h",
+      "hours_other": "{{count}} h"
+    },
+    "last": "last {{range}}",
+    "lastTitle": "Last {{range}}"
+  },
+  "date": {
+    "day": "{{day}} {{month}} {{year}}",
+    "month": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr",
+      "may": "May",
+      "jun": "Jun",
+      "jul": "Jul",
+      "aug": "Aug",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "Dec"
+    }
+  },
+  "pulse": {
+    "serving_one": "Serving {{n}} client · {{rate}} MB/s",
+    "serving_other": "Serving {{n}} clients · {{rate}} MB/s",
+    "downloading_one": "Downloading {{n}} object",
+    "downloading_other": "Downloading {{n}} objects",
+    "prefilling_one": "Prefilling {{n}} game",
+    "prefilling_other": "Prefilling {{n}} games",
+    "idle": "Idle",
+    "failing_one": "{{n}} check failing",
+    "failing_other": "{{n}} checks failing",
+    "warnings_one": "{{n}} warning",
+    "warnings_other": "{{n}} warnings",
+    "pass": "all checks pass",
+    "noTraffic": "no client traffic in the last {{range}}",
+    "lastGot": "clients last got something {{ago}}"
+  },
+  "monitor": {
+    "live": "Live",
+    "reading": "Reading what lanstash kept…",
+    "nothingKept": {
+      "title": "Nothing kept over time",
+      "hint": "lanstash keeps its counters by the minute while it runs."
+    },
+    "chart": "{{label}} per {{bucket}}, last {{range}}",
+    "scale": "{{value}} per {{bucket}}",
+    "scaleCut": "{{top}} · peaks to {{highest}} cut",
+    "allCounters": "All counters"
+  },
+  "counters": {
+    "counter": "counter",
+    "overRange": "over the range",
+    "sinceStart": "since start",
+    "now": "now"
+  },
+  "throughput": {
+    "tile": {
+      "value": "{{size}} out",
+      "detail": "now {{rate}}",
+      "chart": "bytes to clients"
+    },
+    "subtitle": "Bytes to the clients on the network, and from the internet",
+    "live": "MB/s to clients and from the internet",
+    "kept": "Bytes to clients and from the internet",
+    "fromCache": "To clients from cache",
+    "downloading": "To clients, downloading",
+    "fromInternet": "From the internet",
+    "peak": "Peak to clients",
+    "servedFromCache": "Served from cache"
+  },
+  "downloads": {
+    "tile": {
+      "value": "{{n}} done",
+      "detail": "{{inFlight}} in flight · {{failed}} failed",
+      "chart": "downloads started"
+    },
+    "subtitle": "Objects lanstash fetches from the internet",
+    "live": "objects in flight",
+    "scale": "{{n}} objects",
+    "inFlight": "In flight",
+    "pieces": "Pieces",
+    "kept": "Downloads started, and failed",
+    "started": "Started",
+    "completed": "Completed",
+    "failed": "Failed",
+    "joined": "Joined",
+    "crcMismatch": "CRC mismatches",
+    "storeErrors": "Store errors",
+    "rangeIgnored": "Ranges ignored",
+    "upstream4xx": "Origin 4xx",
+    "upstream5xx": "Origin 5xx",
+    "timeouts": "Timeouts",
+    "firstByte": "Time to first byte",
+    "ms": "{{ms}} ms",
+    "list": {
+      "objects_one": "{{count}} object",
+      "objects_other": "{{count}} objects",
+      "objectsInPieces_one": "{{count}} object, {{pieces}} pieces",
+      "objectsInPieces_other": "{{count}} objects, {{pieces}} pieces",
+      "empty": {
+        "title": "Nothing downloading",
+        "hint": "Objects show up here while lanstash fetches what it does not have yet."
+      },
+      "column": {
+        "object": "object",
+        "range": "range",
+        "pieces": "pieces",
+        "progress": "progress",
+        "size": "size"
+      },
+      "whole": "whole",
+      "at": "at {{from}}, {{size}}",
+      "span": "{{from}} – {{to}}",
+      "pieces": "{{n}} pieces"
+    }
+  },
+  "requests": {
+    "tile": {
+      "value": "{{rate}} hits",
+      "detail": "{{n}} requests",
+      "chart": "requests"
+    },
+    "subtitle": "What clients ask for, and how much of it comes from the cache",
+    "live": "requests and hits a second",
+    "requestsNow": "Requests now",
+    "hitsNow": "Hits now",
+    "kept": "Requests, and hits",
+    "hitRate": "Hit rate",
+    "requests": "Requests",
+    "hits": "Hits",
+    "misses": "Misses",
+    "partial": "Partial",
+    "retries": "Retries",
+    "errors": "Errors",
+    "refused": "Refused",
+    "aborted": "Left by the client",
+    "sendfile": "Sent from the file"
+  },
+  "storage": {
+    "tile": {
+      "entries": "{{n}} entries",
+      "free": "{{size}} free",
+      "chart": "bytes written to the store"
+    },
+    "subtitle": "What the store holds, and what is written to it",
+    "live": "MB/s written to the store, and freed by eviction",
+    "writing": "Writing",
+    "freeing": "Freeing",
+    "howFull": "How full",
+    "kept": "Bytes written, and freed by eviction",
+    "written": "Written",
+    "evicted": "Evicted",
+    "storedNow": "Stored now",
+    "freeNow": "Free now",
+    "segmentsEvicted": "Segments evicted",
+    "filesEvicted": "Files evicted",
+    "journalsCompacted": "Journals compacted",
+    "evictionFailures": "Eviction failures",
+    "check": {
+      "checking": "checking · {{percent}} %",
+      "checked": "checked {{day}}",
+      "notYet": "not yet checked",
+      "withinMinutes": "within minutes",
+      "label": "Store check",
+      "read": "Read",
+      "next": "Next check",
+      "progress": "{{done}} of {{all}}",
+      "damage": "Damage found",
+      "damaged_one": "{{n}} damaged record or file: lanstash's log names them",
+      "damaged_other": "{{n}} damaged records or files: lanstash's log names them"
+    }
+  },
+  "connections": {
+    "tile": {
+      "value": "{{n}} https",
+      "detail": "{{n}} open now",
+      "chart": "https connections"
+    },
+    "subtitle": "HTTPS relayed to the origin, and requests for hosts lanstash does not cache",
+    "live": "https connections open, pass-through requests a second",
+    "httpsOpen": "HTTPS open",
+    "passThroughNow": "Pass-through now",
+    "kept": "HTTPS connections, and pass-through requests",
+    "httpsConnections": "HTTPS connections",
+    "passThroughRequests": "Pass-through requests",
+    "passedThrough": "Passed through",
+    "relayed": "Relayed",
+    "refused": "Refused",
+    "badHello": "Bad hello",
+    "connectFailed": "Connect failed"
+  },
+  "home": {
+    "now": {
+      "title": "Downloading now",
+      "games_one": "{{n}} game",
+      "games_other": "{{n}} games",
+      "clients": "Clients",
+      "soFar": "{{size}} so far"
+    },
+    "traffic": "Traffic"
+  },
+  "lifetime": {
+    "label": "What lanstash did",
+    "besides": "Prefill, updates, read-ahead",
+    "fromStashSinceStart": "From the stash since lanstash started",
+    "fromStashSinceDay": "From the stash since {{day}}",
+    "captionRange": "clients got from the stash in the last {{range}}, instead of from the internet",
+    "captionSinceStart": "clients got from the stash since lanstash started, instead of from the internet",
+    "captionSinceDay": "clients got from the stash since {{day}}, instead of from the internet",
+    "fromStash": "from the stash",
+    "fromInternet": "from the internet"
+  },
+  "stash": {
+    "title": "The stash",
+    "games_one": "{{n}} game",
+    "games_other": "{{n}} games",
+    "gamesLauncher_one": "{{n}} game · {{size}} launcher data",
+    "gamesLauncher_other": "{{n}} games · {{size}} launcher data",
+    "empty": {
+      "title": "Nothing stored yet",
+      "hint": "Games appear here once a client downloads them through lanstash."
+    },
+    "largest": "Largest games",
+    "shownOf": "{{shown}} of {{all}}",
+    "allByPlatform": "All games by platform",
+    "library": "Library",
+    "allOn": "All {{n}} games on {{platform}}",
+    "fullness": {
+      "label": "How full the store is",
+      "stored": "{{size}} stored",
+      "free": "{{free}} free of {{whole}}"
+    }
+  },
+  "traffic": {
+    "title": "Most served",
+    "empty": {
+      "title": "Nothing served",
+      "hint": "No client downloaded a game in the last {{range}}."
+    },
+    "games": "Games"
+  }
+}

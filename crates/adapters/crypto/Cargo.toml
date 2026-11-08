@@ -1,0 +1,18 @@
+[package]
+name = "lanstash-adapter-crypto"
+description = "lanstash adapter: password hashing and secure random bytes, through ring."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-domain = { path = "../../domain" }
+lanstash-ports = { path = "../../ports" }
+# PBKDF2-HMAC-SHA256, constant-time comparison and the system's random generator; the same
+# version rustls already brings in. ring: Apache-2.0 AND ISC.
+ring = "=0.17.14"
+
+[lints]
+workspace = true

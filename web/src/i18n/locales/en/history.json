@@ -1,0 +1,44 @@
+{
+  "title": "History",
+  "subtitle": "What was updated when: new builds, and games the stash came to hold whole",
+  "updates": "Updates",
+  "none": {
+    "title": "Nothing updated yet",
+    "hint": "lanstash notes a new build of a stashed game, and when the stash holds all of it, as it checks the builds."
+  },
+  "change": {
+    "newBuild": "new build",
+    "current": "current",
+    "added": "added",
+    "thenCurrent": "{{change}}, now current"
+  },
+  "day": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "date": "{{weekday}} {{day}} {{month}}",
+    "dateYear": "{{weekday}} {{day}} {{month}} {{year}}"
+  },
+  "weekday": {
+    "sun": "Sun",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat"
+  },
+  "month": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
+  }
+}

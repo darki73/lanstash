@@ -1,0 +1,48 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/domain",
+    "crates/ports",
+    "crates/store",
+    "crates/app",
+    "crates/adapters/os",
+    "crates/adapters/crypto",
+    "crates/adapters/fs",
+    "crates/adapters/dns",
+    "crates/adapters/http",
+    "crates/adapters/zerocopy",
+    "crates/adapters/logs",
+    "crates/adapters/names",
+    "crates/adapters/admin-api",
+    "crates/adapters/steam",
+    "crates/adapters/sqlite",
+    "crates/server",
+    "crates/platforms/battlenet/domain",
+    "crates/platforms/battlenet/app",
+    "crates/platforms/battlenet/api",
+    "crates/platforms/steam/domain",
+    "crates/platforms/steam/app",
+    "crates/platforms/epic/domain",
+    "crates/platforms/epic/app",
+    "crates/platforms/riot",
+    "crates/dns/adguard",
+    "crates/dns/pihole",
+    "crates/architecture",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+rust-version = "1.95"
+publish = false
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+
+[profile.release]
+debug = "line-tables-only"

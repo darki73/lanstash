@@ -1,0 +1,23 @@
+[package]
+name = "lanstash-store"
+description = "lanstash storage: layout, segments, object files, journal, index and recovery, over the file-system ports."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+lanstash-domain = { path = "../domain" }
+lanstash-ports = { path = "../ports" }
+
+[dev-dependencies]
+# The integration tests in tests/ use the in-memory doubles.
+lanstash-store = { path = ".", features = ["test-support"] }
+
+[features]
+# In-memory file system and files for tests of this and other crates.
+test-support = []
+
+[lints]
+workspace = true

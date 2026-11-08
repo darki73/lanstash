@@ -1,0 +1,147 @@
+/*
+ * Theme tokens: the one design language every styled component draws with. Colours are named by
+ * meaning, for light and dark; the theme provider sets data-theme on the document element, and
+ * Tailwind reads the tokens through @theme, so bg-raised or text-cache follow the mode.
+ *
+ * The look is an instrument panel: a dark, faintly gridded canvas, hairline panels, labels in
+ * small spaced capitals, figures in the monospace face. Two signal colours carry meaning and
+ * nothing else does:
+ *   cache (amber): bytes served from the stash, the thing lanstash is for;
+ *   origin (cyan): bytes pulled from the internet.
+ *
+ *   Surfaces: canvas (the page), raised (panels), sunken (a meter's track, a well). Lines are
+ *   hairlines.
+ *   Ink: text, muted (secondary words), faint (labels, axes).
+ *   Status: success, warning, danger: always beside a word.
+ */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --lanstash-canvas: oklch(0.972 0.005 85);
+  --lanstash-raised: oklch(0.995 0.002 85);
+  --lanstash-sunken: oklch(0.935 0.006 85);
+  --lanstash-hover: oklch(0.3 0.02 85 / 4%);
+  --lanstash-text: oklch(0.21 0.012 260);
+  --lanstash-muted: oklch(0.4 0.014 260);
+  --lanstash-faint: oklch(0.52 0.012 260);
+  --lanstash-line: oklch(0.3 0.02 260 / 10%);
+  --lanstash-grid: oklch(0.3 0.02 260 / 9%);
+  --lanstash-cache: oklch(0.66 0.16 62);
+  --lanstash-origin: oklch(0.56 0.11 222);
+  --lanstash-success: oklch(0.58 0.14 155);
+  --lanstash-warning: oklch(0.68 0.15 70);
+  --lanstash-danger: oklch(0.57 0.19 25);
+  --lanstash-glow: oklch(0.8 0.12 70 / 16%);
+  --lanstash-panel-shadow: 0 1px 0 oklch(1 0 0 / 70%) inset, 0 1px 2px oklch(0.3 0.02 260 / 5%);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --lanstash-canvas: oklch(0.158 0.007 260);
+  --lanstash-raised: oklch(0.19 0.008 260);
+  --lanstash-sunken: oklch(0.14 0.007 260);
+  --lanstash-hover: oklch(1 0 0 / 3.5%);
+  --lanstash-text: oklch(0.96 0.004 85);
+  --lanstash-muted: oklch(0.8 0.01 260);
+  --lanstash-faint: oklch(0.66 0.012 260);
+  --lanstash-line: oklch(1 0 0 / 7.5%);
+  --lanstash-grid: oklch(1 0 0 / 5%);
+  --lanstash-cache: oklch(0.82 0.15 75);
+  --lanstash-origin: oklch(0.79 0.11 215);
+  --lanstash-success: oklch(0.76 0.15 155);
+  --lanstash-warning: oklch(0.82 0.14 80);
+  --lanstash-danger: oklch(0.7 0.17 22);
+  --lanstash-glow: oklch(0.82 0.15 75 / 7%);
+  --lanstash-panel-shadow: 0 1px 0 oklch(1 0 0 / 4%) inset, 0 12px 32px -16px oklch(0 0 0 / 60%);
+}
+
+@theme inline {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+
+  --shadow-panel: var(--lanstash-panel-shadow);
+
+  --color-canvas: var(--lanstash-canvas);
+  --color-raised: var(--lanstash-raised);
+  --color-sunken: var(--lanstash-sunken);
+  --color-hover: var(--lanstash-hover);
+  --color-text: var(--lanstash-text);
+  --color-muted: var(--lanstash-muted);
+  --color-faint: var(--lanstash-faint);
+  --color-line: var(--lanstash-line);
+  --color-cache: var(--lanstash-cache);
+  /* What has the keyboard's focus, and links in running text: the cache's amber. */
+  --color-accent: var(--lanstash-cache);
+  --color-origin: var(--lanstash-origin);
+  --color-success: var(--lanstash-success);
+  --color-warning: var(--lanstash-warning);
+  --color-danger: var(--lanstash-danger);
+
+  --animate-rise: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-beat: beat 2s ease-out infinite;
+  /* Bytes moving along a line: its dash pattern (6 on, 10 off) slides one period on. */
+  --animate-flow: flow 1.1s linear infinite;
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -16;
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes beat {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklch, var(--lanstash-success) 55%, transparent);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 6px transparent;
+    }
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--lanstash-line);
+  }
+  html {
+    font-family: var(--font-sans);
+  }
+  body {
+    min-height: 100vh;
+    color: var(--lanstash-text);
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* A warm glow in the corner over a dot grid, like the face of a rack unit. */
+    background-color: var(--lanstash-canvas);
+    background-image:
+      radial-gradient(ellipse 60% 40% at 0% 0%, var(--lanstash-glow), transparent 70%),
+      radial-gradient(var(--lanstash-grid) 1px, transparent 1px);
+    background-size:
+      100% 100%,
+      22px 22px;
+    background-attachment: fixed;
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--lanstash-cache) 30%, transparent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      /* biome-ignore lint/complexity/noImportantStyles: reduced motion must win over every animation */
+      animation: none !important;
+      /* biome-ignore lint/complexity/noImportantStyles: as above */
+      transition: none !important;
+    }
+  }
+}

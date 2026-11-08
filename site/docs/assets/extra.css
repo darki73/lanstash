@@ -1,0 +1,68 @@
+/* The home page's opening, and screenshots framed like the app's own panels. */
+
+.hero {
+  text-align: center;
+  padding: 1.5rem 0 1rem;
+}
+
+.hero h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: var(--md-default-fg-color);
+}
+
+/* The app's amber for links and the main button, in both themes. */
+:root {
+  --lanstash-amber: #f5a524;
+}
+
+/* As specific as Material's own palette rules, and after them. */
+[data-md-color-scheme="default"][data-md-color-primary][data-md-color-accent] {
+  --md-typeset-a-color: #b06d00;
+  --md-accent-fg-color: #b06d00;
+}
+
+[data-md-color-scheme="slate"][data-md-color-primary][data-md-color-accent] {
+  --md-typeset-a-color: var(--lanstash-amber);
+  --md-accent-fg-color: var(--lanstash-amber);
+}
+
+.md-typeset .md-button {
+  color: var(--md-typeset-a-color);
+  border-color: var(--md-typeset-a-color);
+}
+
+.md-typeset .md-button--primary,
+.md-typeset .md-button--primary:hover {
+  background-color: var(--lanstash-amber);
+  border-color: var(--lanstash-amber);
+  color: #15120a;
+}
+
+.hero p {
+  font-size: 1.05rem;
+  max-width: 40rem;
+  margin: 0 auto 1.2rem;
+}
+
+.hero .md-button {
+  margin: 0.25rem;
+}
+
+.md-content .md-typeset h1,
+.md-content .hero h1 {
+  color: var(--md-default-fg-color);
+  font-weight: 700;
+}
+
+.md-typeset img {
+  border-radius: 0.6rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  box-shadow: 0 0.6rem 2rem rgba(0, 0, 0, 0.35);
+}
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #0d0f12;
+  --md-code-bg-color: #15181d;
+}

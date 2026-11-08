@@ -1,0 +1,79 @@
+{
+  "title": "Clients",
+  "subtitle": "Who downloads what through the cache",
+  "downloadingNow_one": "{{count}} downloading now",
+  "downloadingNow_other": "{{count}} downloading now",
+  "now": {
+    "title": "Downloading now",
+    "notCounted": "not counted by this lanstash",
+    "nobody": "nobody right now",
+    "doing": "{{client}} · {{platform}}",
+    "speed": "Speed",
+    "perSec": "{{size}}/s",
+    "session": "This download",
+    "started": "Started",
+    "fromCache": "From cache",
+    "state": "From the cache, over the last seconds",
+    "game": "Game"
+  },
+  "over": {
+    "day": "Over the last 24 hours",
+    "week": "Over the last 7 days",
+    "month": "Over the last 30 days"
+  },
+  "range": {
+    "label": "Range",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month"
+  },
+  "find": {
+    "label": "Find a client",
+    "placeholder": "Find a client or game…",
+    "none": "No client matches",
+    "noneHint": "Search by name, address, or a game it got."
+  },
+  "reading": "Reading what lanstash kept…",
+  "notKept": {
+    "title": "Nothing kept",
+    "hint": "This lanstash does not keep what each client got."
+  },
+  "nobody": {
+    "title": "No client got anything yet",
+    "day": "Nothing went to clients over the last 24 hours; a minute shows once it ends.",
+    "week": "Nothing went to clients over the last 7 days; a minute shows once it ends.",
+    "month": "Nothing went to clients over the last 30 days; a minute shows once it ends."
+  },
+  "most": {
+    "title": "Who got most",
+    "clients_one": "{{count}} client",
+    "clients_other": "{{count}} clients",
+    "label": "Each client's share of what clients got",
+    "held": "{{size}} to clients",
+    "more_one": "{{count}} more",
+    "more_other": "{{count}} more"
+  },
+  "card": {
+    "rename": "Rename",
+    "nameIt": "Name it (empty: the network's name)",
+    "nameOf": "Name of {{address}}",
+    "save": "Save",
+    "cancel": "Cancel",
+    "got": {
+      "day": "got in the last 24 hours",
+      "week": "got in the last 7 days",
+      "month": "got in the last 30 days"
+    },
+    "fromStash": "from the stash",
+    "fromInternet": "from the internet",
+    "games": "Games",
+    "showAll_one": "Show all {{count}} client",
+    "showAll_other": "Show all {{count}} clients"
+  },
+  "cache": "{{percent}} cache",
+  "whoGotIt": {
+    "title": "Who got it",
+    "note": "last 30 days",
+    "clients": "Clients"
+  }
+}
