@@ -30,6 +30,10 @@
       "label": "Prefill requests at once",
       "help": "How many requests a prefill keeps in flight (1 to 64)."
     },
+    "check_updates": {
+      "label": "Newer lanstash",
+      "help": "Asks GitHub every few hours whether a newer lanstash is released, and says so at the foot of every page. Off: nothing is asked."
+    },
     "steam_os": {
       "label": "Operating system",
       "help": "Who a Steam install is for: prefills, builds and sizes follow it."
@@ -80,6 +84,7 @@
   "choice": {
     "always": "always",
     "off": "off",
+    "on": "on",
     "weekly": "weekly",
     "monthly": "monthly",
     "window": "window",

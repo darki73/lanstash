@@ -37,6 +37,7 @@ pub mod prefill;
 pub mod prefill_runs;
 pub mod private_games;
 pub mod prune_segments;
+pub mod releases;
 pub mod rounds;
 pub mod serve;
 pub mod sessions;

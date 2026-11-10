@@ -19,6 +19,7 @@ mod settings;
 mod setup;
 mod updates;
 mod users;
+mod version;
 mod web;
 
 use std::sync::{Arc, Mutex};

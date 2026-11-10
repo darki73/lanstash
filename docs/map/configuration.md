@@ -9,7 +9,7 @@ use them; there is no global configuration. **[verified]**
 - Every key with its default: `KEYS` `crates/server/src/config.rs:13` (this table follows it; the code wins).
   An unknown key is an error, with its line number in a file. `store.<service>` is the only key with a variable
   part (service names: letters, digits, `_`, `.`).
-- Parsing: `Settings` `:154` (`set` `:178`, `add_file` `:191`), then `build` `:250` into `Config` `:61`.
+- Parsing: `Settings` `:154` (`set` `:178`, `add_file` `:191`), then `build` `:250` into `Config` `:67`.
   Command line: `parse` `crates/server/src/cli.rs:146`, `config_args` `:185`. Tests
   `crates/server/tests/config.rs`, `crates/server/tests/cli.rs`.
 - Read by the root only: `config` `crates/server/src/run/mod.rs:52`.
@@ -48,6 +48,7 @@ file is found through `state` as the file (or the default) sets it, before the f
 | `prefill_parallel` | `8` | prefill requests in flight at once, 1 to 64 ([battlenet.md](battlenet.md#prefill)) |
 | `auto_update` | off | `always` (same as `00:00-24:00`), a daily window in UTC (`HH:MM-HH:MM`, may cross midnight; start and end differ), or `off`: when games once held whole are queued for their new builds ([operations.md](operations.md#automatic-updates)) |
 | `nginx_cache` | off | lancache's nginx cache directory, read-only: the nginx views and prefill from lancache ([battlenet.md](battlenet.md#prefill-from-lancache)) |
+| `check_updates` | `on` | whether lanstash asks GitHub for a newer release of itself: `GitHubReleases` `crates/adapters/http/src/github.rs` (`releases/latest`, `tag_name`) watched by `ReleaseWatch` `crates/app/src/releases.rs` (every 6 h, a failure again after 1 h, never while a caller waits), wired in `crates/server/src/run/releases.rs`; `off`: `NoReleases`, nothing asked ([operations.md](operations.md#admin-api)) |
 | `secrets` | `/var/lib/lanstash/secrets` | private files (directory 0700, files 0600) for secrets: Steam refresh tokens, the Epic sign-ins (`epic-accounts`) and client (`epic-client`), lanstash's own accounts (`accounts`: name, role, PBKDF2 hash) |
 | `state` | `/var/lib/lanstash/state` | private files kept between runs so work is not redone after a restart: `settings`, `lanstash.db` (history, counters, prefill runs), `lifetime`, `auto-update`, `verify`, `dns` (the DNS server's setup; its password is in `secrets`), `hidden` (the games kept private), `steam-depot-*`, `steam-library`, `epic-library-2`. Losing it costs time and history, never stored bytes |
 | `access_log` | off | one line per request ([operations.md](operations.md#logs)) |
@@ -75,7 +76,7 @@ All of the above **[verified]** against `KEYS` and `build`.
 
 ## Settings the web UI may change
 
-`LIVE` `crates/server/src/settings.rs:108`; read and written by `LiveSettings` `:208` behind the `Tunables` port
+`LIVE` `crates/server/src/settings.rs:108`; read and written by `LiveSettings` `:215` behind the `Tunables` port
 (`crates/ports/src/settings.rs`); served at `/api/v1/settings` ([operations.md](operations.md#settings-and-restart)).
 Tests `crates/server/tests/settings.rs`. **[verified]**
 
@@ -83,6 +84,7 @@ Tests `crates/server/tests/settings.rs`. **[verified]**
 |---|---|---|---|
 | `auto_update` | Updates | `always`, `off` | window `HH:MM-HH:MM, UTC` |
 | `prefill_parallel` | Updates | `4`, `8`, `16`, `32` | other, 1 to 64 |
+| `check_updates` | Updates | `on`, `off` | |
 | `steam_os` | Steam | `windows`, `linux`, `macos` | |
 | `steam_language` | Steam | Steam's 30 language names, several at once (`multi`) | |
 | `steam_arch` | Steam | `64`, `32` | |

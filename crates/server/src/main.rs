@@ -15,7 +15,6 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use lanstash::cli::{self, Command};
 use lanstash::report::Outcome;
 use lanstash_ports::clock::Clock;
-use lanstash_ports::releases::NoReleases;
 
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -53,7 +52,7 @@ fn main() -> ExitCode {
         Command::User { config, action } => run::users::user(&config, &action),
         Command::Install { config, no_start, force, web } => setup::install(&config, no_start, force, web.as_deref()),
         Command::Uninstall { purge } => setup::uninstall(purge),
-        Command::Doctor(c) => setup::doctor(&c, &clock, &NoReleases),
+        Command::Doctor(c) => setup::doctor(&c, &clock, run::releases::for_doctor(&c).as_ref()),
         Command::SegDump { file, verify, limit } => run::store::seg_dump(&file, verify, limit),
         Command::SegVerify { file } => run::store::seg_verify(&file),
     };

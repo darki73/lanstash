@@ -18,6 +18,7 @@ use lanstash_adapter_dns::resolver::{Resolve, ResolverConfig, UdpResolver};
 use lanstash_adapter_os::process::{Whose, open_files};
 use lanstash_adapter_os::systemd::Systemd;
 use lanstash_app::health::{self, Check, Level};
+use lanstash_app::releases::version_check;
 use lanstash_ports::clock::Clock;
 use lanstash_ports::releases::Releases;
 use lanstash_store::game::SegmentOptions;
@@ -237,13 +238,7 @@ pub fn doctor(args: &ConfigArgs, clock: &Arc<dyn Clock>, releases: &dyn Releases
         };
     }
 
-    let version = env!("CARGO_PKG_VERSION");
-    match releases.latest() {
-        Ok(Some(v)) if v != version => add!(Level::Warn, "version", format!("{version}; {v} is available")),
-        Ok(Some(_)) => add!(Level::Ok, "version", format!("{version} (the latest)")),
-        Ok(None) => add!(Level::Ok, "version", format!("{version} (newer releases: not checked yet)")),
-        Err(e) => add!(Level::Warn, "version", format!("{version} (could not check for newer: {e})")),
-    }
+    checks.push(version_check(env!("CARGO_PKG_VERSION"), releases));
 
     let systemd = sd.available();
     let state = systemd.then(|| sd.state(&l.unit));

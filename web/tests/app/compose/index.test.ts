@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 import type { Fetch } from "@/adapters/api/version"
-import { buildsFallback, compose, qrReads, signInEvery, statusEvents } from "@/app/compose"
+import { buildsFallback, compose, qrReads, signInEvery, statusEvents, versionEvery, versionSoon } from "@/app/compose"
 import { harness, snapshot } from "../../kit"
 
 const quietWindow = {
@@ -28,6 +28,35 @@ describe("app/compose", () => {
     await vi.waitFor(() => expect(c.version.get()).toEqual({ version: "0.1.0" }))
     stop()
     expect(sources[0]?.closed).toBe(true)
+  })
+  it("asks for the version again soon, then now and then, so a newer release shows on an open page", async () => {
+    const { open } = harness()
+    const put: { run: () => void; ms: number }[] = []
+    const later = (run: () => void, ms: number) => put.push({ run, ms })
+    let asked = 0
+    const fetch: Fetch = async (url) => {
+      const body = url.endsWith("/api/v1/version")
+        ? { version: "0.1.0", ...(++asked > 1 ? { latest: "0.2.0" } : {}) }
+        : {}
+      return { ok: true, json: async () => body }
+    }
+    const c = compose({ apiBase: "", openSource: open, fetch, window: quietWindow, later })
+    const stop = c.start()
+    await vi.waitFor(() => expect(c.version.get()).toEqual({ version: "0.1.0" }))
+    const next = () => {
+      const at = put.findIndex((p) => p.ms === versionSoon || p.ms === versionEvery)
+      const [p] = put.splice(at, 1)
+      return p
+    }
+    await vi.waitFor(() => expect(put.some((p) => p.ms === versionSoon)).toBe(true))
+    next()?.run()
+    await vi.waitFor(() => expect(c.version.get()).toEqual({ version: "0.1.0", latest: "0.2.0" }))
+    await vi.waitFor(() => expect(put.some((p) => p.ms === versionEvery)).toBe(true))
+    stop()
+    const before = asked
+    next()?.run()
+    await new Promise((r) => setTimeout(r, 10))
+    expect(asked, "stopped: not asked again").toBe(before)
   })
   it("reads the app's path from the window", () => {
     const { open } = harness()

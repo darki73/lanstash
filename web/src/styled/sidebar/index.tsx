@@ -2,7 +2,7 @@
  * Sidebar: the frame of the app. On the left the sidebar: the mark and the name at the top, then
  * the sections of navigation links. Beside it the page: a header that stays at the top (where you
  * are, as a trail of names, each above the page a link to its own, and what goes on the right of it, such as the connection), the page's
- * content, and a footer after it (such as the version, and a notice on the right). On a narrow screen the
+ * content, and a footer that stays at the bottom (such as the version, and a notice on the right). On a narrow screen the
  * sidebar sits above the page and each section is a row that scrolls sideways, and the trail
  * shows only the page's own name. A section is a label
  * in small spaced capitals over its links; a link is a row with an icon, its words and a figure,
@@ -119,7 +119,7 @@ export function AppFrame({
           </div>
         </main>
         {(footer !== undefined || notice !== undefined) && (
-          <footer className="flex flex-wrap items-center justify-between gap-3 border-t bg-canvas/80 px-4 py-3 text-faint text-xs backdrop-blur-md sm:px-8">
+          <footer className="sticky bottom-0 z-10 flex flex-wrap items-center justify-between gap-3 border-t bg-canvas/80 px-4 py-3 text-faint text-xs backdrop-blur-md sm:px-8">
             <div className="flex items-center gap-3 font-mono">{footer}</div>
             <div className="flex items-center gap-3">{notice}</div>
           </footer>

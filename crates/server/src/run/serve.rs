@@ -171,6 +171,7 @@ pub fn serve(args: &ConfigArgs, clock: &Arc<dyn Clock>) -> Result<Outcome, Strin
             .with_private(Arc::new(PrivateGames::new(Arc::new(PrivateDir::new(&c.state)))?))
             .with_sessions(sessions)
             .with_invites(invites)
+            .with_releases(super::releases::newer(&c, clock))
             .with_dns(Arc::new(dns_link(&c, &cache, rules)?));
         for (name, counters) in more {
             api = api.with_counters(name, counters);

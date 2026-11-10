@@ -44,6 +44,7 @@ describe("styled/sidebar", () => {
     expect(here.getByText("Platforms").getAttribute("aria-current")).toBeNull()
     expect(screen.getByRole("main").textContent).toBe("the page")
     expect(screen.getByRole("contentinfo").textContent).toBe("lanstash 0.1.0update available")
+    expect(screen.getByRole("contentinfo").className, "kept in view at the bottom").toContain("sticky bottom-0")
     expect(screen.getByText("live")).toBeTruthy()
   })
   it("leaves the footer out when there is nothing for it", () => {

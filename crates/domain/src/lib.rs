@@ -28,6 +28,7 @@ pub mod rsa;
 pub mod segment;
 pub mod service;
 pub mod tls;
+pub mod version;
 pub mod window;
 pub mod x509;
 pub mod zip;

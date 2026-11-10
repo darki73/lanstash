@@ -3,7 +3,7 @@
 //! the path names; the platform renders its own documents.
 //!
 //! API, version 1 (JSON; errors are `{"error": "...", "kind": "..."}`):
-//! - `GET /api/v1/version`: `{"version": "..."}`,
+//! - `GET /api/v1/version`: `{"version": "..."}`, and `"latest"` when a newer release is known ([`version`]),
 //! - `GET /api/v1/status`: one status snapshot,
 //! - `GET /api/v1/events`: server-sent events, one snapshot per interval,
 //! - `GET /api/v1/art/<platform>/<id>[/icon|/background|/logo]`: a game's cover image, icon, background or
@@ -54,6 +54,7 @@ pub mod settings;
 mod setup;
 mod updates;
 pub mod users;
+pub mod version;
 mod web;
 
 use std::sync::atomic::AtomicUsize;
@@ -69,7 +70,6 @@ use lanstash_app::dns::DnsLink;
 use lanstash_app::prefill_runs::PrefillRuns;
 use lanstash_app::serve::ConnState;
 use lanstash_app::status::{CounterGroup, Status};
-use lanstash_domain::json::string;
 use lanstash_ports::art::{ArtError, ArtKind};
 use lanstash_ports::platform::Platform;
 use lanstash_ports::prefill::{Prefill, PrefillStatus};
@@ -138,6 +138,8 @@ pub struct AdminApi {
     pseudonyms: crate::anon::Pseudonyms,
     /// The built web UI's directory ([`web`]); without it `/` is the built-in page.
     web: Option<std::path::PathBuf>,
+    /// A newer release, for `GET /api/v1/version`; without it none is said.
+    newer: Option<version::Newer>,
 }
 
 /// The most event streams open at once: the rest of the admin port's connections stay free (for a stop).
@@ -182,6 +184,7 @@ impl AdminApi {
             streams_from: Mutex::default(),
             pseudonyms: crate::anon::Pseudonyms::default(),
             web: None,
+            newer: None,
         }
     }
 
@@ -362,7 +365,7 @@ impl AdminApi {
             Route::Game => self.game(target),
             Route::GameDelete => self.delete_game(target),
             Route::GamePrune => self.prune_game(target),
-            Route::Version => Answer::json(200, format!("{{\"version\":{}}}\n", string(VERSION))),
+            Route::Version => self.version(),
             Route::Status => {
                 let mut last = self.last.lock().unwrap_or_else(PoisonError::into_inner);
                 Answer::json(200, self.snapshot(&mut last))

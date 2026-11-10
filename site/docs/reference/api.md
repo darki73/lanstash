@@ -52,7 +52,7 @@ ends its sessions.
 
 | Path | What it is for | Needs |
 |---|---|---|
-| `GET /api/v1/version` | lanstash's version | |
+| `GET /api/v1/version` | lanstash's version, and `latest` when a newer release is known (`check_updates`) | |
 | `GET /api/v1/status` | one status snapshot: counters, downloads in flight, storage use, prefills, clients downloading now | |
 | `GET /api/v1/events` | the same snapshot as a stream of server-sent events, one a second | |
 | `GET /api/v1/games/<platform>/<game>` | one game's builds in detail | |

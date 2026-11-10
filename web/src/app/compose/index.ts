@@ -93,6 +93,13 @@ export const accountPlatforms = ["steam", "epicgames"] as const
 /** How often the open game's page asks about it again. */
 export const gameEvery = 5_000
 
+/**
+ * How soon the version is asked for a second time (lanstash asks GitHub about newer releases when first
+ * asked, which takes a moment), and how often after that (a page left open learns of a release too).
+ */
+export const versionSoon = 15_000
+export const versionEvery = 600_000
+
 /** Where the API is; "" is the page's own origin (lanstash itself, or the dev server's proxy). */
 export const statusEvents = (apiBase: string) => `${apiBase}/api/v1/events`
 
@@ -370,9 +377,15 @@ export function compose(o: ComposeOptions): Composition {
         }
         for (const p of accountPlatforms) kick(p)
       }
-      readVersion(o.fetch, o.apiBase).then((v) => {
-        if (!stopped && v !== undefined) version.set(v)
-      })
+      const readVersionNow = (asked: number) => {
+        if (stopped) return
+        readVersion(o.fetch, o.apiBase).then((v) => {
+          if (stopped) return
+          if (v !== undefined) version.set(v)
+          later(() => readVersionNow(asked + 1), asked === 0 ? versionSoon : versionEvery)
+        })
+      }
+      readVersionNow(0)
       // Each platform's builds are shown as they arrive: a slow one holds back none of the others.
       const readOne = (p: string) =>
         readBuilds(o.fetch, o.apiBase, p).then((b) => {

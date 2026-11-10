@@ -1,10 +1,11 @@
 /**
  * Version: what lanstash's API answers on /api/v1/version: the version running, and the newest
- * release when lanstash has looked one up (not yet: the field is absent until it does).
+ * release when it is newer than that (lanstash asks GitHub every few hours, unless check_updates
+ * is off; the field is absent until it knows of one).
  */
 export interface Version {
   readonly version: string
-  /** The newest release, when known. */
+  /** The newest release, when it is newer than the version running. */
   readonly latest?: string | null
 }
 

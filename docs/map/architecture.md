@@ -153,7 +153,7 @@ Ports (`crates/ports/src`, traits only) and their implementations **[verified]**
 | Prompt | `Prompt` `crates/ports/src/prompt.rs:7` | `Terminal` `crates/adapters/os/src/terminal.rs:31` |
 | DNS server | `DnsSetup` `crates/ports/src/dns.rs:49`, `DnsServer` `:109` | `LiveDns` `crates/server/src/dns.rs:107`; `AdGuard`, `PiHole` (dns crates) |
 | Live settings | `Tunables` `crates/ports/src/settings.rs:8` | `LiveSettings` `crates/server/src/settings.rs:268` |
-| Releases | `Releases` `crates/ports/src/releases.rs:6` | `NoReleases` only |
+| Releases | `Releases` `crates/ports/src/releases.rs:6` | `GitHubReleases` (adapter-http, over the `Web` port), `NoReleases` (`check_updates = off`) |
 | Accounts | `Account` `crates/ports/src/account.rs:10` | `SteamAccount`, `EpicAccounts` (platform apps) |
 
 - The platform contract: `Platform` `crates/ports/src/platform.rs:99` (id, names, art, builds and build status,

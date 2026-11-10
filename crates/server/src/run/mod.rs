@@ -8,6 +8,7 @@ mod epic;
 mod health;
 mod kept;
 mod platforms;
+pub mod releases;
 pub mod serve;
 pub mod steam;
 pub mod store;

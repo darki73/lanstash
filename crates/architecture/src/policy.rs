@@ -360,6 +360,7 @@ pub const LANSTASH: Policy = Policy {
         ("lanstash", "run/kept", "the binary's database wiring; not reachable from tests/"),
         ("lanstash", "run/clients", "the binary's client-naming wiring; not reachable from tests/"),
         ("lanstash", "run/health", "the binary's health wiring (its rules: lanstash_app::health); not reachable"),
+        ("lanstash", "run/releases", "the binary's release wiring (its rules: lanstash_app::releases); not reachable"),
     ],
     module_bans: &[
         // The admin API reads the stash only through the status use case and the platforms.

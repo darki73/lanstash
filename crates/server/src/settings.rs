@@ -121,6 +121,13 @@ pub const LIVE: &[Live] = &[
         choices: &["4", "8", "16", "32"],
     },
     Live {
+        key: "check_updates",
+        group: "Updates",
+        label: "Newer lanstash",
+        help: "Asks GitHub every few hours whether a newer lanstash is released, and says so at the foot of every page. Off: nothing is asked.",
+        choices: &["on", "off"],
+    },
+    Live {
         key: "steam_os",
         group: "Steam",
         label: "Operating system",

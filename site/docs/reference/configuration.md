@@ -80,6 +80,7 @@ lanstash restarts.
 | `prefill_parallel` | `8` | prefill requests in flight at once, 1 to 64 | yes |
 | `auto_update` | off | when games once held whole are queued for their new builds: `always`, a daily window in UTC (`HH:MM-HH:MM`, may cross midnight), or `off` | yes |
 | `nginx_cache` | off | lancache's nginx cache directory, read only: lets you see what it holds of a game and prefill from it | |
+| `check_updates` | `on` | lanstash asks GitHub every few hours whether a newer lanstash is released (`api.github.com`, the repository's latest release); when one is, the foot of every page and `lanstash doctor` say so. `off`: nothing is asked | yes |
 
 ## Downloads
 
@@ -124,7 +125,7 @@ The Settings page offers these keys, in groups:
 
 | Group | Keys | Choices offered |
 |---|---|---|
-| Updates | `auto_update`, `prefill_parallel` | always, off or a window; 4, 8, 16, 32 or another number from 1 to 64 |
+| Updates | `auto_update`, `prefill_parallel`, `check_updates` | always, off or a window; 4, 8, 16, 32 or another number from 1 to 64; on, off |
 | Steam | `steam_os`, `steam_language`, `steam_arch` | windows, linux, macos; Steam's languages, several at once; 64, 32 |
 | Battle.net | `blizzard_region`, `blizzard_tags` | us, eu, kr, tw, cn; platform (Windows, OSX), bitness and language |
 | Storage | `max_size`, `keep_free`, `verify_every`, `verify_rate` | free text sizes; off, weekly, monthly or every `<n>d`; 20M, 50M, 100M or another rate |

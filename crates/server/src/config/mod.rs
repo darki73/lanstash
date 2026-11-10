@@ -31,6 +31,7 @@ const KEYS: &[(&str, Option<&str>, bool)] = &[
     ("steam_language", Some("english"), false),
     ("steam_arch", Some("64"), false),
     ("prefill_parallel", Some("8"), false),
+    ("check_updates", Some("on"), false),
     ("auto_update", None, false),
     ("nginx_cache", None, false),
     ("secrets", Some("/var/lib/lanstash/secrets"), false),
@@ -98,6 +99,8 @@ pub struct Config {
     pub prefill_parallel: usize,
     /// When games once held whole are updated (`always`, or a daily UTC window `HH:MM-HH:MM`); `None` = never.
     pub auto_update: Option<lanstash_domain::window::Window>,
+    /// Whether lanstash asks GitHub now and then for a newer release of itself.
+    pub check_updates: bool,
     /// An nginx (lancache) cache directory to probe and import from (`None` = none).
     pub nginx_cache: Option<PathBuf>,
     /// Directory of private files for secrets (the Steam refresh token).
@@ -305,6 +308,7 @@ impl Settings {
             })?,
             steam_arch: self.parsed("steam_arch", |v| ["64", "32"].contains(&v).then(|| v.to_owned()))?,
             prefill_parallel: self.parsed("prefill_parallel", |v| v.parse().ok().filter(|n| (1..=64).contains(n)))?,
+            check_updates: self.parsed("check_updates", boolean)?,
             blizzard_tags: self.parsed("blizzard_tags", |v| {
                 let tags: Vec<String> = list(v).map(str::to_owned).collect();
                 let ok = |t: &String| {

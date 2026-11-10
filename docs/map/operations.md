@@ -137,7 +137,7 @@ proxy is one address), so a stop still gets through. **[verified: `tests/api/eve
 | Method | Path | Answer |
 |---|---|---|
 | GET | `/` | the built-in status page (`status_page.html`, compiled in), drawn from `api/v1/events` |
-| GET | `/api/v1/version` | `{"version"}` |
+| GET | `/api/v1/version` | `{"version"}`, plus `"latest"` when a release newer than the running version is known (`check_updates`; `crates/adapters/admin-api/src/api/version.rs`); the web UI asks again after 15 s, then every 10 min, and its footer says "update available" |
 | GET | `/api/v1/status` (`/status.json`) | one [status snapshot](#status) |
 | GET | `/api/v1/events` (`/events`) | [event stream](#event-streams) |
 | POST | `/api/v1/shutdown` (`/shutdown`) | 202 `{"stopping": true}`, then a [clean stop](#clean-stop); 403 unless from this machine (loopback) |
@@ -433,8 +433,8 @@ Steps that touch the system: `crates/server/src/setup.rs`; pure parts: `crates/s
 - `sudo lanstash uninstall [--purge]` (`:156`): disables and stops the service (its `ExecStop` is a clean stop),
   removes the unit and the binary; `--purge` also `/etc/lanstash`. The cached data is never deleted; its roots
   are named.
-- `lanstash doctor` (`:198`, read-only; default config `/etc/lanstash/lanstash.conf`): version (newer releases
-  through a `Releases` port; `NoReleases` is wired, so none are checked), service state, configuration,
+- `lanstash doctor` (`:232`, read-only; default config `/etc/lanstash/lanstash.conf`): version (a newer release
+  asked of GitHub now, unless `check_updates` is off: `version_check` `crates/app/src/releases.rs`), service state, configuration,
   `admin_listen` set, each listen port (answering when the service runs; else free, or held by a lanstash outside
   the service), the admin API, the service's open files against its limit, each store root writable and its free
   space against `keep_free`, the store's contents (from the running service's status, with its background check's

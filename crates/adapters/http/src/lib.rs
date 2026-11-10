@@ -2,11 +2,12 @@
 //! [`lanstash_app::serve::RequestHandler`] over plain TCP or TLS ([`server`],
 //! [`link`]), the client that
 //! reaches the origins ([`upstream`]), the client of web APIs on the network
-//! ([`web`]), and the HTTPS passthrough that relays TLS by its server name
-//! ([`tls_passthrough`]).
+//! ([`web`]), lanstash's own releases on GitHub over it ([`github`]), and the HTTPS passthrough
+//! that relays TLS by its server name ([`tls_passthrough`]).
 
 #![forbid(unsafe_code)]
 
+pub mod github;
 pub mod link;
 pub mod server;
 pub mod tls_passthrough;
