@@ -48,7 +48,7 @@ installing, configuring, DNS, the web UI page by page, and every command and set
 
 ## Status
 
-lanstash is young (0.1.0) but runs every day on a household LAN with several terabytes of Steam and Battle.net games.
+lanstash is young (0.2.0) but runs every day on a household LAN with several terabytes of Steam and Battle.net games.
 
 | | Cached | Prefill | Builds tracked |
 | --- | --- | --- | --- |

@@ -55,7 +55,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-adapter-admin-api",
  "lanstash-adapter-crypto",
@@ -85,7 +85,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-admin-api"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-adapter-http",
  "lanstash-app",
@@ -96,7 +96,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-crypto"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
@@ -105,7 +105,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-dns"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
@@ -113,7 +113,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-fs"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-adapter-os",
  "lanstash-domain",
@@ -123,7 +123,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-http"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-adapter-crypto",
  "lanstash-adapter-dns",
@@ -138,7 +138,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-logs"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-adapter-http",
  "lanstash-domain",
@@ -147,7 +147,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-names"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
@@ -155,14 +155,14 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-os"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-ports",
 ]
 
 [[package]]
 name = "lanstash-adapter-sqlite"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-ports",
  "rusqlite",
@@ -170,7 +170,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-steam"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
@@ -180,14 +180,14 @@ dependencies = [
 
 [[package]]
 name = "lanstash-adapter-zerocopy"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "libc",
 ]
 
 [[package]]
 name = "lanstash-app"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-app",
  "lanstash-domain",
@@ -197,11 +197,11 @@ dependencies = [
 
 [[package]]
 name = "lanstash-architecture"
-version = "0.1.0"
+version = "0.2.0"
 
 [[package]]
 name = "lanstash-battlenet-api"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-app",
  "lanstash-battlenet-app",
@@ -213,7 +213,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-battlenet-app"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-app",
  "lanstash-battlenet-domain",
@@ -224,14 +224,14 @@ dependencies = [
 
 [[package]]
 name = "lanstash-battlenet-domain"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
 ]
 
 [[package]]
 name = "lanstash-dns-adguard"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
@@ -239,7 +239,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-dns-pihole"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
@@ -247,11 +247,11 @@ dependencies = [
 
 [[package]]
 name = "lanstash-domain"
-version = "0.1.0"
+version = "0.2.0"
 
 [[package]]
 name = "lanstash-epic"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
@@ -259,7 +259,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-epic-app"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-app",
  "lanstash-domain",
@@ -270,14 +270,14 @@ dependencies = [
 
 [[package]]
 name = "lanstash-ports"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
 ]
 
 [[package]]
 name = "lanstash-riot"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
@@ -285,7 +285,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-steam-app"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-app",
  "lanstash-domain",
@@ -296,7 +296,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-steam-domain"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
@@ -304,7 +304,7 @@ dependencies = [
 
 [[package]]
 name = "lanstash-store"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lanstash-domain",
  "lanstash-ports",
