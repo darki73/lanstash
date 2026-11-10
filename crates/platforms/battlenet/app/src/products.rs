@@ -1,7 +1,7 @@
 //! Every Battle.net game there is, cached or not:
 //! the launcher catalog's products ([`ProductList`], [`crate::catalog`])
 //! with, per product code, the game directory its files are under on the CDN
-//! (`/<code>/cdns`: `tpr/<game>`) and its current version in the region
+//! (`/<code>/cdns`: `tpr/<game>`, [`game_of_path`]) and its current version in the region
 //! (`/<code>/versions`), both from the patch service through the
 //! [`Upstream`] port.
 //!
@@ -17,7 +17,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard, PoisonError};
 
 use lanstash_battlenet_domain::catalog::Product;
-use lanstash_battlenet_domain::tact::{PATCH_HOST, PATCH_PORT, cdn, version};
+use lanstash_battlenet_domain::tact::{PATCH_HOST, PATCH_PORT, cdn, game_of_path, version};
 
 use crate::catalog::CodeOf;
 use lanstash_ports::upstream::Source;
@@ -237,9 +237,10 @@ impl Inner {
     }
 
     fn one(&self, code: &str) -> Result<Found, String> {
-        let game = self.table(code, "cdns")?.and_then(|t| cdn(&t, &self.opts.region)).and_then(|(_, path)| {
-            path.strip_prefix("tpr/").filter(|g| !g.is_empty() && !g.contains('/')).map(str::to_owned)
-        });
+        let game = self
+            .table(code, "cdns")?
+            .and_then(|t| cdn(&t, &self.opts.region))
+            .and_then(|(_, path)| game_of_path(&path).map(str::to_owned));
         let version = self.table(code, "versions")?.and_then(|t| version(&t, &self.opts.region)).map(|v| v.name);
         Ok(Found { game, version })
     }

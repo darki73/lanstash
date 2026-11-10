@@ -20,6 +20,18 @@ use alloc::vec::Vec;
 pub const PATCH_HOST: &str = "us.patch.battle.net";
 pub const PATCH_PORT: u16 = 1119;
 
+/// The CDN's top directories that hold games: `tpr/<game>` for nearly every product, `cortez/<game>` for
+/// Call of Duty: Black Ops 6 (`cortez/Cerberus-B-Live`).
+pub const CDN_ROOTS: &[&str] = &["tpr", "cortez"];
+
+/// The game directory of a product's CDN path (`/<code>/cdns`' `Path`): `tpr/auks` → `auks`,
+/// `cortez/Cerberus-B-Live` → `Cerberus-B-Live`; none for a path under another root or deeper.
+#[must_use]
+pub fn game_of_path(path: &str) -> Option<&str> {
+    let (root, game) = path.trim_matches('/').split_once('/')?;
+    (CDN_ROOTS.contains(&root) && !game.is_empty() && !game.contains('/')).then_some(game)
+}
+
 /// The rows of a BPSV table, each as `(column name, value)` pairs.
 #[must_use]
 pub fn bpsv(text: &str) -> Vec<Vec<(&str, &str)>> {

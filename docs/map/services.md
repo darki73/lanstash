@@ -47,7 +47,7 @@ service gets `Generic` (`crates/domain/src/service/mod.rs:91`; `Profiles::get` `
 | Question | Steam | Blizzard | Epic | Riot | Generic |
 |---|---|---|---|---|---|
 | Is this request cached? | chunks `/depot/<d>/chunk/<40 hex>` and patches `/depot/<d>/patch/<from>/<to>` (all decimal); everything else (manifests, ...) passes | everything except `releaselisting_*` and `*.version` | the same | the same | the same |
-| Game (storage group) | depot `<d>` | product: `/tpr/<product>/...`, else `_` | app in `/Builds/Org/<o>/<app>/...` or `/Builds/<app>/...`, else `_` **[hypothesis]**, from URL samples | `_` | `_` |
+| Game (storage group) | depot `<d>` | the directory below a CDN root: `/tpr/<game>/...` or `/cortez/<game>/...` (Black Ops 6), else `_` | app in `/Builds/Org/<o>/<app>/...` or `/Builds/<app>/...`, else `_` **[hypothesis]**, from URL samples | `_` | `_` |
 | Fetch mode | `WholeObject`: chunks are fetched whole, without `Range` | `Ranges` | `Ranges` | `Ranges` | `Ranges`, with a fallback ([requests.md](requests.md#origins-that-ignore-range)) |
 | Origin honours `Range`? | not used | yes **[verified]** | yes **[hypothesis]** | yes **[hypothesis]** | depends on the origin |
 | Body check | `x-content-crc` = CRC-32/IEEE of the whole body, when the header is there (chunks) **[verified]**; patches carry none | none | none | none | none |

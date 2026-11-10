@@ -76,7 +76,9 @@ The catalog is the only source of Battle.net names, codes and art; there is no b
 ## Products
 
 `BlizzardProducts` `crates/platforms/battlenet/app/src/products.rs:97`: the launcher catalog's installs, one
-entry per product code with its `family`, each code's CDN directory (`/<code>/cdns`, `tpr/<game>`) and version,
+entry per product code with its `family`, each code's CDN directory (`/<code>/cdns`: `tpr/<game>`, or `cortez/<game>` for Black Ops 6, whose directory is
+`Cerberus-B-Live`; `game_of_path` `crates/platforms/battlenet/domain/src/tact.rs:30`, roots in `CDN_ROOTS`; of the
+catalog's 50 products on 2026-11-11, 48 under `tpr`, 1 under `cortez`, 1 with none **[verified]**) and version,
 looked up on a thread of their own, 8 at a time (`LOOKUPS` `:108`), kept 10 min (`ProductOptions` `:46`).
 `list` `:132` never waits: it answers with what is known. A directory maps back to its codes (`codes_of` `:180`:
 every code under it, as several flavours share one, the main install first; `code_of` `:171` the first), so a

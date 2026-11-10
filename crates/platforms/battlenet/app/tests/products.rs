@@ -117,6 +117,20 @@ fn asking_for_an_unknown_directory_starts_the_lookups() {
 }
 
 #[test]
+fn a_game_under_another_cdn_root_has_its_directory() {
+    let up = Arc::new(FakeUpstream::default());
+    let cdns = "Name!STRING:0|Path!STRING:0|Hosts!STRING:0\neu|cortez/Cerberus-B-Live|eu.cdn.blizzard.com\n";
+    up.route(PATCH_HOST, "/btlr/cdns", FakeResponse::ok(cdns.as_bytes(), &[]));
+    up.route(PATCH_HOST, "/btlr/versions", FakeResponse { status: 404, ..FakeResponse::ok(b"", &[]) });
+    let clock = Arc::new(Tick(AtomicU64::new(1_000)));
+    let list = Arc::new(Fixed(vec![product("btlr", "Call of Duty: Black Ops 6")]));
+    let opts = ProductOptions { region: "eu".into(), ..ProductOptions::default() };
+    let p = BlizzardProducts::new(list, up, clock, opts);
+    assert_eq!(settled(&p)[0].game.as_deref(), Some("Cerberus-B-Live"));
+    assert_eq!(p.code_of("Cerberus-B-Live").as_deref(), Some("btlr"));
+}
+
+#[test]
 fn products_sharing_a_directory_are_its_flavours() {
     let up = Arc::new(FakeUpstream::default());
     let table = |v: &str, build: &str| {

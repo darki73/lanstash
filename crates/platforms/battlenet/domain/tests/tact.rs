@@ -7,6 +7,16 @@ const H1: &str = "ca8e463507cfff95a5759b5550f3eae5";
 const H2: &str = "053433e65726aa5f1ae961168e3cb576";
 
 #[test]
+fn the_game_directory_is_below_a_cdn_root() {
+    assert_eq!(game_of_path("tpr/auks"), Some("auks"));
+    assert_eq!(game_of_path("cortez/Cerberus-B-Live"), Some("Cerberus-B-Live"));
+    assert_eq!(game_of_path("/tpr/wow/"), Some("wow"), "slashes around do not matter");
+    for none in ["other/game", "tpr", "tpr/", "tpr/a/b", ""] {
+        assert_eq!(game_of_path(none), None, "{none:?}");
+    }
+}
+
+#[test]
 fn cdn_host_and_path_of_a_region() {
     let cdns = "Name!STRING:0|Path!STRING:0|Hosts!STRING:0\n## seqn = 2\n\
                 eu|tpr/catalogs|level3.blizzard.com eu.cdn.blizzard.com\n\
