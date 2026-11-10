@@ -7,6 +7,8 @@
  * failed. buildOf finds a game's entry.
  */
 
+import type { Planning } from "@/contracts/prefill"
+
 /** A build and how much of its install the stash holds. */
 export interface BuildRelease {
   readonly version: string
@@ -17,6 +19,8 @@ export interface BuildRelease {
   readonly complete: boolean
   /** Why its install could not be worked out. */
   readonly plan_error: string | null
+  /** While its install is being worked out (or waits its turn): how far that has come. */
+  readonly planning?: Planning | null
 }
 
 export interface BuildGame {
@@ -28,6 +32,7 @@ export interface BuildGame {
   readonly have?: number | null
   readonly want?: number | null
   readonly plan_error?: string | null
+  readonly planning?: Planning | null
   /** The stash holds all of the current build's install. */
   readonly current: boolean
   readonly prerelease?: BuildRelease | null

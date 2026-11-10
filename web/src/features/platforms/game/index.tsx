@@ -23,7 +23,7 @@ import type { Catalog, CatalogProduct } from "@/contracts/catalog"
 import type { ClientsReader } from "@/contracts/clients"
 import type { GameBuild, GameDetail } from "@/contracts/game"
 import { eventsOf, type History, noHistory } from "@/contracts/history"
-import { noPrefill, type PrefillActions, running, waiting } from "@/contracts/prefill"
+import { noPrefill, type Planning, type PrefillActions, running, waiting } from "@/contracts/prefill"
 import type { PrivateActions } from "@/contracts/private"
 import { recentDeletion, type StashActions } from "@/contracts/stash"
 import type { Snapshot } from "@/contracts/status"
@@ -164,6 +164,20 @@ function details(t: Words<"platforms">, b: GameBuild) {
   )
 }
 
+/**
+ * A build's install being worked out: what it is doing (the step, where the API names it), and,
+ * once the number of files to read is known, how many are in as a bar and a count.
+ */
+function planned(t: Words<"platforms">, p: Planning | null | undefined) {
+  const step = p?.step == null ? t("game.planning") : t(`game.planningStep.${p.step}`)
+  if (p == null || p.total === 0) return { step }
+  return {
+    step,
+    fraction: p.done / p.total,
+    amount: t("game.planningFiles", { done: count(p.done), total: count(p.total) }),
+  }
+}
+
 /** A build as a row: name, version, badge, how much is stashed, why it is not known, details. */
 function row(
   t: Words<"platforms">,
@@ -176,6 +190,7 @@ function row(
   note?: string,
 ) {
   const known = b.have !== null && b.want !== null
+  const working = known || b.plan_error !== null ? undefined : planned(t, b.planning)
   return (
     <BuildRow
       key={key}
@@ -184,15 +199,17 @@ function row(
       tag={tag}
       version={t("game.version", { version: b.version })}
       badge={badge(t, b)}
-      fraction={known && b.want !== null && b.want > 0 ? (b.have ?? 0) / b.want : undefined}
-      amount={known ? t("game.of", { have: size(b.have ?? 0), want: size(b.want ?? 0) }) : undefined}
+      fraction={known && b.want !== null && b.want > 0 ? (b.have ?? 0) / b.want : working?.fraction}
+      amount={known ? t("game.of", { have: size(b.have ?? 0), want: size(b.want ?? 0) }) : working?.amount}
       note={
         known ? (
           note === undefined ? undefined : (
             <Muted>{note}</Muted>
           )
         ) : (
-          <Signal tone={b.plan_error === null ? "waiting" : "bad"}>{b.plan_error ?? t("game.planning")}</Signal>
+          <Signal tone={b.plan_error === null ? "waiting" : "bad"}>
+            {b.plan_error ?? working?.step ?? t("game.planning")}
+          </Signal>
         )
       }
       actions={actions}
@@ -214,6 +231,7 @@ export function fallbackBuild(cached: BuildGame | undefined, listed: CatalogProd
       want: cached.want ?? null,
       complete: cached.current,
       plan_error: cached.plan_error ?? null,
+      planning: cached.planning ?? null,
       detail: null,
     }
   }

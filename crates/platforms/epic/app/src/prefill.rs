@@ -138,7 +138,8 @@ impl Planner for EpicPlanner {
         }
         let (_, asset) = self.library.app(game).ok_or(format!("{game} is not in the Epic library"))?;
         version(&asset.build_version);
-        *self.planning.lock().unwrap_or_else(PoisonError::into_inner) = Some(Planning { done: 0, total: 1 });
+        *self.planning.lock().unwrap_or_else(PoisonError::into_inner) =
+            Some(Planning { done: 0, total: 1, step: None });
         let found = self.current(game);
         *self.planning.lock().unwrap_or_else(PoisonError::into_inner) = None;
         let Current { manifest, dir, hosts, .. } = found?;

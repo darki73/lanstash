@@ -74,7 +74,8 @@ pub struct SeenRequest {
 pub struct FakeUpstream {
     routes: Mutex<HashMap<String, FakeResponse>>,
     pub seen: Mutex<Vec<SeenRequest>>,
-    held: Mutex<bool>,
+    /// Responses held back: those whose target holds this text (empty: every one).
+    held: Mutex<Option<String>>,
     released: Condvar,
 }
 
@@ -98,12 +99,18 @@ impl FakeUpstream {
 
     /// Responses wait in `fetch` until [`FakeUpstream::release`].
     pub fn hold(&self) {
-        *lock(&self.held) = true;
+        self.hold_matching("");
+    }
+
+    /// Responses for targets holding `text` wait in `fetch` until [`FakeUpstream::release`]; the
+    /// others are answered.
+    pub fn hold_matching(&self, text: &str) {
+        *lock(&self.held) = Some(text.to_owned());
     }
 
     /// Let held responses go.
     pub fn release(&self) {
-        *lock(&self.held) = false;
+        *lock(&self.held) = None;
         self.released.notify_all();
     }
 }
@@ -142,7 +149,7 @@ impl Upstream for FakeUpstream {
             headers: req.headers.iter().map(|(n, v)| ((*n).to_owned(), (*v).to_owned())).collect(),
         });
         let mut held = lock(&self.held);
-        while *held {
+        while held.as_deref().is_some_and(|t| req.target.contains(t)) {
             held = self.released.wait(held).unwrap_or_else(PoisonError::into_inner);
         }
         drop(held);

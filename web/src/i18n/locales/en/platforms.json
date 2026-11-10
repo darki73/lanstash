@@ -234,6 +234,13 @@
     },
     "version": "version {{version}}",
     "planning": "working out what an install downloads…",
+    "planningStep": {
+      "queued": "waiting while another build is worked out…",
+      "configs": "reading the build's configs…",
+      "indexes": "reading the archives' indexes…",
+      "manifest": "reading the download manifest…"
+    },
+    "planningFiles": "{{done}}/{{total}} files read",
     "lancacheNone": "lancache's old cache holds none of it.",
     "lancacheSome": "lancache's old cache holds about {{share}} of it.",
     "masked": {

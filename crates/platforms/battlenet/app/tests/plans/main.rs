@@ -55,8 +55,38 @@ fn the_indexes_spread_over_the_hosts_whichever_worker_takes_them() {
 }
 
 #[test]
+fn a_planning_says_its_step_and_a_plan_waiting_its_turn_is_queued() {
+    use lanstash_battlenet_app::plans::key;
+    use lanstash_ports::prefill::{PlanStep, Planning};
+    use std::time::{Duration, Instant};
+    let w = bnet(false);
+    w.up.hold_matching(".index");
+    assert!(w.plans.ready("osi", &version()).is_none());
+    let until = Instant::now() + Duration::from_secs(5);
+    let step = || w.plans.progress(BUILD).and_then(|p| p.step);
+    while step() != Some(PlanStep::Indexes) && Instant::now() < until {
+        std::thread::yield_now();
+    }
+    assert_eq!(
+        w.plans.progress(BUILD),
+        Some(Planning { done: 2, total: 7, step: Some(PlanStep::Indexes) }),
+        "both configs in, five indexes asked for"
+    );
+    // One plan is made at a time: another install's waits for this one.
+    assert!(w.plans.ready_for("osi", &version(), &["OSX"]).is_none());
+    let mac = key(&version(), &["OSX"]);
+    assert_eq!(w.plans.progress(&mac), Some(Planning { done: 0, total: 0, step: Some(PlanStep::Queued) }));
+    w.up.release();
+    while w.plans.ready_for("osi", &version(), &["OSX"]).is_none() && Instant::now() < until {
+        std::thread::yield_now();
+    }
+    assert!(w.plans.ready("osi", &version()).is_some_and(|m| m.is_ok()));
+    assert_eq!((w.plans.progress(BUILD), w.plans.progress(&mac)), (None, None), "made: no planning left");
+}
+
+#[test]
 fn a_build_is_planned_once_at_a_time() {
-    use lanstash_ports::prefill::Planning;
+    use lanstash_ports::prefill::{PlanStep, Planning};
     use std::sync::Arc;
     use std::time::{Duration, Instant};
     let w = bnet(false);
@@ -70,7 +100,11 @@ fn a_build_is_planned_once_at_a_time() {
     while w.plans.progress(BUILD).is_none() && Instant::now() < until {
         std::thread::yield_now();
     }
-    assert_eq!(w.plans.progress(BUILD), Some(Planning { done: 0, total: 0 }), "the CDN table is held");
+    assert_eq!(
+        w.plans.progress(BUILD),
+        Some(Planning { done: 0, total: 0, step: Some(PlanStep::Configs) }),
+        "the CDN table is held: the configs are next"
+    );
     // A second caller waits for the first instead of planning again.
     let second = {
         let plans = Arc::clone(&w.plans);

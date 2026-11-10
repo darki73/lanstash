@@ -21,7 +21,8 @@
 //! one at a time, so the builds page and a game's page never wait for one. A build is planned once at a time: a second
 //! caller waits for the first and takes its plan. The indexes (hundreds for
 //! a large game) are read [`PlanOptions::parallel`] at a time over the
-//! region's CDN hosts, and [`BlizzardPlans::progress`] says how many are in.
+//! region's CDN hosts, and [`BlizzardPlans::progress`] says how many are in, at which step
+//! ([`PlanStep`]), or that the build waits its turn.
 //! [`BlizzardPlans::coverage`] counts the plan's bytes the stash holds
 //! ([`held`]), without counting as a use.
 
@@ -29,14 +30,14 @@ mod held;
 mod make;
 
 use std::collections::BTreeMap;
-use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU8, AtomicU64, Ordering};
 use std::sync::{Arc, Condvar, Mutex, MutexGuard, PoisonError};
 
 use lanstash_app::serve::RequestHandler;
 use lanstash_battlenet_domain::plan::{Coverage, Plan, PlanDetail};
 use lanstash_battlenet_domain::tact::Version;
 use lanstash_ports::clock::Clock;
-use lanstash_ports::prefill::Planning;
+use lanstash_ports::prefill::{PlanStep, Planning};
 use lanstash_ports::upstream::Upstream;
 use lanstash_store::store::Store;
 
@@ -79,8 +80,28 @@ type Made = Result<Arc<Plan>, String>;
 /// A plan waiting to be made: the product, the build and the install (none: the one set up).
 type Pending = (String, Version, Vec<String>);
 
-/// A planning's files read, and of how many.
-type Counters = (Arc<AtomicU64>, Arc<AtomicU64>);
+/// A planning's files read, of how many (0: not known yet), and its step.
+#[derive(Default)]
+struct Counters {
+    done: AtomicU64,
+    total: AtomicU64,
+    step: AtomicU8,
+}
+
+/// The steps of a planning as they are kept, in their order (the first one is where it starts).
+const STEPS: [PlanStep; 3] = [PlanStep::Configs, PlanStep::Indexes, PlanStep::Manifest];
+
+impl Counters {
+    fn at(&self, step: PlanStep) {
+        let n = STEPS.iter().position(|s| *s == step).unwrap_or(0);
+        self.step.store(u8::try_from(n).unwrap_or(0), Ordering::Relaxed);
+    }
+
+    fn planning(&self) -> Planning {
+        let step = STEPS.get(usize::from(self.step.load(Ordering::Relaxed))).copied();
+        Planning { done: self.done.load(Ordering::Relaxed), total: self.total.load(Ordering::Relaxed), step }
+    }
+}
 
 /// Ends a build's planning, however it ends: no longer being made, and the
 /// callers waiting for it are woken.
@@ -107,8 +128,8 @@ struct Inner {
     /// Plans waiting for the planning thread, by [`key`].
     pending: Mutex<BTreeMap<String, Pending>>,
     planning: AtomicBool,
-    /// Builds being planned now, by build config: files read, of how many (0: not known yet).
-    making: Mutex<BTreeMap<String, Counters>>,
+    /// Builds being planned now, by [`key`].
+    making: Mutex<BTreeMap<String, Arc<Counters>>>,
     /// Signalled when a build's planning ends.
     made: Condvar,
 }
@@ -197,12 +218,15 @@ impl BlizzardPlans {
         None
     }
 
-    /// How far the planning of plan `key` ([`key`]) has come, while it is being planned.
+    /// How far the planning of plan `key` ([`key`]) has come while it is being planned; a plan
+    /// waiting for the planning thread is [`PlanStep::Queued`], nothing read yet.
     #[must_use]
     pub fn progress(&self, key: &str) -> Option<Planning> {
-        let making = lock(&self.inner.making);
-        let (done, total) = making.get(key)?;
-        Some(Planning { done: done.load(Ordering::Relaxed), total: total.load(Ordering::Relaxed) })
+        if let Some(c) = lock(&self.inner.making).get(key) {
+            return Some(c.planning());
+        }
+        let waits = self.inner.kept(key).is_none() && lock(&self.inner.pending).contains_key(key);
+        waits.then_some(Planning { done: 0, total: 0, step: Some(PlanStep::Queued) })
     }
 
     /// Whether the install set up has `tag` (`Windows`): its plan is the build's own.
@@ -246,7 +270,7 @@ impl Inner {
     /// outcome instead.
     fn make_and_keep(&self, product: &str, version: &Version, install: &[&str]) -> Made {
         let key = &key(version, install);
-        let (done, total) = {
+        let counters = {
             let mut making = lock(&self.making);
             while making.contains_key(key) {
                 making = self.made.wait(making).unwrap_or_else(PoisonError::into_inner);
@@ -254,12 +278,12 @@ impl Inner {
             if let Some(made) = self.kept(key) {
                 return made;
             }
-            let entry = (Arc::new(AtomicU64::new(0)), Arc::new(AtomicU64::new(0)));
-            making.insert(key.clone(), entry.clone());
+            let entry = Arc::new(Counters::default());
+            making.insert(key.clone(), Arc::clone(&entry));
             entry
         };
         let _ending = Ending { inner: self, key };
-        let made = self.make(product, version, install, (&done, &total)).map(Arc::new);
+        let made = self.make(product, version, install, &counters).map(Arc::new);
         let mut plans = lock(&self.plans);
         plans.insert(key.clone(), (self.clock.now_ms(), made.clone()));
         while plans.len() > self.opts.keep.max(1) {

@@ -154,7 +154,10 @@ pub fn prefill_json(p: &PrefillStatus) -> String {
         opt(p.error.as_deref()),
         p.started_ms,
         p.finished_ms.map_or_else(|| "null".to_owned(), |t| t.to_string()),
-        p.planning.map_or_else(|| "null".to_owned(), |g| format!("{{\"done\":{},\"total\":{}}}", g.done, g.total)),
+        p.planning.map_or_else(
+            || "null".to_owned(),
+            |g| format!("{{\"done\":{},\"total\":{},\"step\":{}}}", g.done, g.total, opt(g.step.map(|s| s.as_str())))
+        ),
         p.queued.iter().map(|g| string(g)).collect::<Vec<_>>().join(","),
     )
 }

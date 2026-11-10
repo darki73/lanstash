@@ -19,17 +19,22 @@ fn num(v: Option<u64>) -> String {
 }
 
 /// A build: `version`, `build_config`, `have` and `want` (bytes of its
-/// install stashed and in all; `null` until planned), `complete`, `plan_error`.
+/// install stashed and in all; `null` until planned), `complete`, `plan_error`, `planning`
+/// (`{"done", "total", "step"}` while its plan is made or waits its turn, else `null`).
 #[must_use]
 pub fn build(b: &BuildState) -> String {
     format!(
-        "{{\"version\":{},\"build_config\":{},\"have\":{},\"want\":{},\"complete\":{},\"plan_error\":{}}}",
+        "{{\"version\":{},\"build_config\":{},\"have\":{},\"want\":{},\"complete\":{},\"plan_error\":{},\"planning\":{}}}",
         string(&b.version.name),
         string(&b.version.build_config),
         num(b.coverage.map(|c| c.have)),
         num(b.coverage.map(|c| c.want)),
         b.complete(),
         opt(b.plan_error.as_deref()),
+        b.planning.map_or_else(
+            || "null".to_owned(),
+            |g| format!("{{\"done\":{},\"total\":{},\"step\":{}}}", g.done, g.total, opt(g.step.map(|s| s.as_str())))
+        ),
     )
 }
 
@@ -57,7 +62,7 @@ pub fn builds_of(
         .iter()
         .map(|c| {
             let current = c.build.as_ref().map_or_else(
-                || "\"version\":null,\"build_config\":null,\"have\":null,\"want\":null,\"complete\":false,\"plan_error\":null".to_owned(),
+                || "\"version\":null,\"build_config\":null,\"have\":null,\"want\":null,\"complete\":false,\"plan_error\":null,\"planning\":null".to_owned(),
                 |b| {
                     let j = build(b);
                     j[1..j.len() - 1].to_owned() // its fields, inline

@@ -11,11 +11,12 @@ use lanstash_battlenet_domain::plan::{Build, Plan, assemble};
 use lanstash_battlenet_domain::tact::{
     IndexEntry, PATCH_HOST, PATCH_PORT, Version, build_files, cdn_hosts, config_list, config_value, parse_index, target,
 };
+use lanstash_ports::prefill::PlanStep;
 use lanstash_ports::upstream::Source;
 use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
 use std::sync::{Mutex, PoisonError};
 
-use super::{Inner, lock};
+use super::{Counters, Inner, lock};
 
 impl Inner {
     /// One file (or range): through the cache, so it is stashed, when the stash holds the game's
@@ -79,14 +80,16 @@ impl Inner {
         Ok(out.into_iter().map(|m| m.into_inner().unwrap_or_else(PoisonError::into_inner)).collect())
     }
 
-    /// Makes the plan; `done` of `total` counts the configs and indexes read.
+    /// Makes the plan; `counters` count the configs and indexes read and say the step it is at.
     pub(super) fn make(
         &self,
         product: &str,
         version: &Version,
         install: &[&str],
-        (done, total): (&AtomicU64, &AtomicU64),
+        counters: &Counters,
     ) -> Result<Plan, String> {
+        let (done, total) = (&counters.done, &counters.total);
+        counters.at(PlanStep::Configs);
         let src = Source { host: PATCH_HOST.into(), port: Some(PATCH_PORT), target: format!("/{product}/cdns") };
         let cdns = origin::get(self.upstream.as_ref(), &src, 1 << 20).map_err(|e| format!("{product}/cdns: {e:?}"))?;
         let (hosts, path) =
@@ -128,6 +131,7 @@ impl Inner {
             indexed.push(at("patch", h, ".index")?);
         }
         total.fetch_add(indexed.len() as u64, Ordering::Relaxed);
+        counters.at(PlanStep::Indexes);
         let bodies = self.fetch_all(&hosts, &indexed, done)?;
         keep(&indexed, &bodies);
         let mut indexes: Vec<Vec<IndexEntry>> = Vec::with_capacity(archive_hashes.len());
@@ -147,6 +151,7 @@ impl Inner {
         let named = build_files(&build_config);
         let mut wanted: Vec<(String, u64)> = named.iter().map(|(_, k, s)| (k.clone(), *s)).collect();
         let download = named.iter().find(|(n, _, _)| n == "download").ok_or("build config: no download manifest")?;
+        counters.at(PlanStep::Manifest);
         let manifest_at = locate(&[(download.1.clone(), download.2)], &indexes, file_index.as_deref());
         let raw = match manifest_at[0].place {
             Place::Archive { archive, offset, size } => {

@@ -100,7 +100,7 @@ not kept by the minute.
 `crates/adapters/sqlite/tests/runs.rs`]**:
 
 - Every `LOOK_MS` (`:13`, 5 s) `look` `:48` takes each platform's ended jobs, `Prefill::take_ended`
-  (`crates/ports/src/prefill.rs:196`, default none; `Prefiller` `crates/app/src/prefill/mod.rs:355` drains the
+  (`crates/ports/src/prefill.rs:249`, default none; `Prefiller` `crates/app/src/prefill/mod.rs:355` drains the
   jobs that ended since, the last `ENDED_KEPT` 64, `crates/app/src/prefill/line.rs:12`), plus the last job when it
   is not running, so every job of a queue is kept even when several end between two looks
   (`every_queued_job_is_kept_though_they_end_between_two_looks`).

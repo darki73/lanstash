@@ -21,9 +21,10 @@ use std::sync::{Arc, Mutex, PoisonError};
 use lanstash_battlenet_domain::tact::{PATCH_HOST, PATCH_PORT, Version, version};
 use lanstash_store::store::Store;
 
-use crate::plans::BlizzardPlans;
+use crate::plans::{BlizzardPlans, key};
 use crate::products::BlizzardProducts;
 use lanstash_battlenet_domain::plan::Coverage;
+use lanstash_ports::prefill::Planning;
 use lanstash_ports::upstream::Source;
 
 use lanstash_app::origin::{self, OriginError};
@@ -64,6 +65,8 @@ pub struct BuildState {
     pub coverage: Option<Coverage>,
     /// Why the plan could not be made.
     pub plan_error: Option<String>,
+    /// While its plan is being made, or waits its turn: how far that has come.
+    pub planning: Option<Planning>,
 }
 
 impl BuildState {
@@ -251,7 +254,11 @@ impl BlizzardBuilds {
             Some((_, Err(e))) => (None, Some(e)),
             None => (None, None),
         };
-        BuildState { version, coverage, plan_error }
+        let planning = match (&self.plans, coverage, &plan_error) {
+            (Some(p), None, None) => p.progress(&key(&version, &[])),
+            _ => None,
+        };
+        BuildState { version, coverage, plan_error, planning }
     }
 
     fn table(&self, code: &str, table: &str) -> Looked {

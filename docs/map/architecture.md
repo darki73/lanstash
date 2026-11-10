@@ -147,7 +147,7 @@ Ports (`crates/ports/src`, traits only) and their implementations **[verified]**
 | Art | `ArtSource` `crates/ports/src/art.rs:47` | Steam (`SteamArt`), Battle.net (`BlizzardCatalog`), Epic (`EpicLibrary`) |
 | lancache's cache | `NginxCacheSource` `crates/ports/src/nginx.rs:10` | `NginxDir` `crates/adapters/fs/src/nginx_dir.rs:33` |
 | Kept state, secrets | `Keep` `crates/ports/src/keep.rs:9`, `Secrets` `crates/ports/src/secrets.rs:7` | `PrivateDir` `crates/adapters/fs/src/private_dir.rs:96`, `:110` |
-| Database | `HistoryLog` `crates/ports/src/history.rs:76`, `StatsLog` `crates/ports/src/stats.rs:11`, `PrefillLog` `crates/ports/src/prefill.rs:202`, `ClientLabels` `crates/ports/src/clients.rs:19` | `Database` (adapter-sqlite) |
+| Database | `HistoryLog` `crates/ports/src/history.rs:76`, `StatsLog` `crates/ports/src/stats.rs:11`, `PrefillLog` `crates/ports/src/prefill.rs:255`, `ClientLabels` `crates/ports/src/clients.rs:19` | `Database` (adapter-sqlite) |
 | Client names | `ReverseNames` `crates/ports/src/clients.rs:9` | `PtrResolver` `crates/adapters/dns/src/reverse.rs:54` |
 | Message links | `Link` `crates/ports/src/link.rs:9`, `Dialer` `:25`, `Random` `crates/ports/src/random.rs:6` | `Wss`, `WssDialer`, `RingRandom` (adapter-steam) |
 | Prompt | `Prompt` `crates/ports/src/prompt.rs:7` | `Terminal` `crates/adapters/os/src/terminal.rs:31` |
@@ -158,7 +158,7 @@ Ports (`crates/ports/src`, traits only) and their implementations **[verified]**
 
 - The platform contract: `Platform` `crates/ports/src/platform.rs:99` (id, names, art, builds and build status,
   catalog, game, nginx, prefill, prune, parts, forget, account, setup file; views are `Result<String, ViewError>`,
-  `:20`) and `Prefill` `crates/ports/src/prefill.rs:161` (start, queue, unqueue, stop, status, ended jobs).
+  `:20`) and `Prefill` `crates/ports/src/prefill.rs:195` (start, queue, unqueue, stop, status, ended jobs).
   Implemented by `SteamPlatform`, `BattleNet`, `EpicPlatform`, `RiotPlatform`, and wrapped by `KeptBuilds`
   (`crates/app/src/kept_builds.rs:178`), which works builds out on a thread and keeps them.
 - Request routing stays a domain concern: `Profile` `crates/domain/src/service/mod.rs:56`, registered in

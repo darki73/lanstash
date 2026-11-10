@@ -24,9 +24,9 @@ The views behind the generic admin paths ([operations.md](operations.md#admin-ap
 
 | Path | Document |
 |---|---|
-| `GET /api/v1/builds/blizzard` | `{"region", "lancache", "games": [{"game", "product", "version", "build_config", "have", "want", "complete", "plan_error", "current", "prerelease", "error", "flavours", "lancache_share"}]}`; `prerelease` is `null` or `{"version", "build_config", "have", "want", "complete", "plan_error"}`; `lancache`: whether prefill from lancache can run; `flavours`: the other products of the directory, `[{"product", "name", "build", "prerelease"}]` (`BuildCheck::flavours`); `lancache_share`: `{"have", "want"}` bytes of the current build lancache's cache holds, asked only for a build not stashed whole and probed in the background once per build (`NginxProbe::share`), `null` until known (`json::builds_of` `:48`) |
-| `GET /api/v1/catalog/blizzard` | every Battle.net install there is, one entry per product code: `{"products": [{"code", "name", "family", "game", "version", "known"}]}` (`family` the catalog product's name; `game` its CDN directory; `json::catalog` `:85`) |
-| `GET /api/v1/games/blizzard/<game>` | one game: `{"game", "product", "region", "build", "prerelease", "error", "lancache", "flavours"}`; each build adds `"detail"`: `{"files_have", "files_want", "archived_have", "archived_want", "file_count", "part_count", "archive_count", "requests", "absent"}` or `null` until planned (`json::game` `:128`, `json::detail` `:105`) |
+| `GET /api/v1/builds/blizzard` | `{"region", "lancache", "games": [{"game", "product", "version", "build_config", "have", "want", "complete", "plan_error", "planning", "current", "prerelease", "error", "flavours", "lancache_share"}]}`; `prerelease` is `null` or `{"version", "build_config", "have", "want", "complete", "plan_error", "planning"}`; `planning`: `null`, or while the build's plan is made or waits its turn `{"done", "total", "step"}` (files read of all; `step` `queued`, `configs`, `indexes` or `manifest`; `BlizzardPlans::progress`); `lancache`: whether prefill from lancache can run; `flavours`: the other products of the directory, `[{"product", "name", "build", "prerelease"}]` (`BuildCheck::flavours`); `lancache_share`: `{"have", "want"}` bytes of the current build lancache's cache holds, asked only for a build not stashed whole and probed in the background once per build (`NginxProbe::share`), `null` until known (`json::builds_of` `:55`) |
+| `GET /api/v1/catalog/blizzard` | every Battle.net install there is, one entry per product code: `{"products": [{"code", "name", "family", "game", "version", "known"}]}` (`family` the catalog product's name; `game` its CDN directory; `json::catalog` `:92`) |
+| `GET /api/v1/games/blizzard/<game>` | one game: `{"game", "product", "region", "build", "prerelease", "error", "lancache", "flavours"}`; each build adds `"detail"`: `{"files_have", "files_want", "archived_have", "archived_want", "file_count", "part_count", "archive_count", "requests", "absent"}` or `null` until planned (`json::game` `:139`, `json::detail` `:112`) |
 | `GET /api/v1/games/blizzard/<game>/nginx` | what lancache's nginx cache (`nginx_cache`) holds of the current build, from its plan (read-only, synchronous): `{"game", "product", "version", "whole", "archived", "slices", "slices_found", "missing"}`; `whole`/`archived` are `{"wanted", "found", "bytes", "bytes_found"}`; 404 without `nginx_cache` (`json::probe` `:169`) |
 | `GET /api/v1/games/blizzard/<game>/prune` | `{"game", "files", "bytes", "recent_bytes"}` (`json::prune` `:194`); `POST` the same path deletes `files` as a deletion job ([Prune](#prune)) |
 
@@ -86,7 +86,7 @@ game not in the stash can be checked and prefilled **[verified]**.
 
 ## Builds
 
-`BlizzardBuilds` `crates/platforms/battlenet/app/src/builds.rs:123` (`check` `:195`, `check_all` `:175`):
+`BlizzardBuilds` `crates/platforms/battlenet/app/src/builds.rs:126` (`check` `:198`, `check_all` `:178`):
 a game's product code is the products' `code_of` for its directory, else the directory itself;
 `/<code>/versions` of `blizzard_region` (kept 10 min, `BuildOptions` `:35`) is a game's current build,
 `/<code>/bgdl` a pre-release build (when it names another build). Coverage (`have` of `want`) is the plan's bytes
@@ -96,8 +96,9 @@ it is (`crates/platforms/battlenet/app/src/plans/held.rs`, one sweep per archive
 
 ## Plans
 
-`BlizzardPlans` `crates/platforms/battlenet/app/src/plans/mod.rs:112` (`plan` `:155`, `ready` `:164`,
-`progress` `:181`, `coverage` `:189`, `detail` `:195`); made in `crates/platforms/battlenet/app/src/plans/make.rs`;
+`BlizzardPlans` `crates/platforms/battlenet/app/src/plans/mod.rs:137` (`plan` `:180`, `ready` `:198`,
+`progress` `:224`: files read, of how many, and the step, `PlanStep` `queued` while the plan waits its turn, then
+`configs`, `indexes`, `manifest`; `coverage` `:240`, `detail` `:246`); made in `crates/platforms/battlenet/app/src/plans/make.rs`;
 assembled by `assemble` `crates/platforms/battlenet/domain/src/plan.rs:63` into `Plan` `:15`.
 
 What an install of a build downloads, read through the cache (so stashed like a client's) when the stash holds the
@@ -123,7 +124,7 @@ archive (offset, size), loose (file index) or absent **[verified]**.
 ## Prefill
 
 The runner is generic, in the core: `Prefiller` `crates/app/src/prefill/mod.rs:178` (the `Prefill` port,
-`crates/ports/src/prefill.rs:161`), its jobs in `crates/app/src/prefill/run.rs`. A platform supplies a
+`crates/ports/src/prefill.rs:195`), its jobs in `crates/app/src/prefill/run.rs`. A platform supplies a
 `Planner` (`crates/app/src/prefill/mod.rs:103`: `admit`, `work`, `planning`) whose `work` returns a `Work` `:82`
 (hosts, jobs, bytes, a `Check` per piece, `parts`, `check_cdn`). Battle.net's is `BlizzardJobs`
 `crates/platforms/battlenet/app/src/prefill.rs:21` (`admit` `:64`, `work` `:74`, `planning` `:125`) **[verified]**.
@@ -132,8 +133,9 @@ The runner is generic, in the core: `Prefiller` `crates/app/src/prefill/mod.rs:1
   archive ranges. `prefill_parallel` requests run at once, the workers taking the plan's CDN hosts in turn; what is
   stashed is skipped without reading, 404s counted (`files_missing`).
 - `admit` refuses the launcher's own directories (`NotAGame`) and a build without plans (`NotSetUp`).
-- While the build is still being planned, the status carries `planning: {"done", "total"}` (`Planning`
-  `crates/ports/src/prefill.rs:110`).
+- While the build is still being planned, the status carries `planning: {"done", "total", "step"}` (`Planning`
+  `crates/ports/src/prefill.rs:114`; `step` is `null` on Steam and Epic). The game page shows the same for a build
+  whose plan is being made: the step, a bar and the files read.
 - For another platform (a Mac in a LAN of Windows PCs): `POST /api/v1/prefill/blizzard/<game>?install=OSX[,arm64]`
   (`Prefill::queue_for`, `Planner::work_for`; a platform that cannot answers `NoInstall`, 400). Its plan
   (`BlizzardPlans::plan_for`, kept by `<build>+<tags>`) takes the configured tags with each named tag in place of

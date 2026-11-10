@@ -7,6 +7,16 @@
 
 export type PrefillState = "running" | "done" | "stopped" | "failed"
 
+/** A step of a planning, where the platform names them (Battle.net), in the order they come. */
+export type PlanStep = "queued" | "configs" | "indexes" | "manifest"
+
+/** How far a planning has come: files read of all it reads (0: not known yet), and its step. */
+export interface Planning {
+  readonly done: number
+  readonly total: number
+  readonly step?: PlanStep | null
+}
+
 export interface Prefill {
   readonly game: string
   readonly version: string | null
@@ -37,7 +47,7 @@ export interface Prefill {
   readonly started_ms: number
   readonly finished_ms: number | null
   /** While the build is being planned: configs and indexes read, of how many (0: not known yet). */
-  readonly planning?: { readonly done: number; readonly total: number } | null
+  readonly planning?: Planning | null
   /** The games waiting to be prefilled after this one, in order. */
   readonly queued?: readonly string[]
 }

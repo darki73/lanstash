@@ -9,7 +9,7 @@ use lanstash_app::fetch::DownloadInfo;
 use lanstash_app::serve::clients::Downloading;
 use lanstash_app::status::{CounterGroup, Snapshot, UsageRow};
 use lanstash_domain::extent::Span;
-use lanstash_ports::prefill::{Planning, PrefillFrom, PrefillStatus};
+use lanstash_ports::prefill::{PlanStep, Planning, PrefillFrom, PrefillStatus};
 use lanstash_store::index::Usage;
 use lanstash_store::layout::GameDir;
 
@@ -103,7 +103,7 @@ fn a_prefill_has_every_field_the_web_app_reads() {
         files_rejected: 1,
         bytes_total: 100,
         bytes: 40,
-        planning: Some(Planning { done: 3, total: 9 }),
+        planning: Some(Planning { done: 3, total: 9, step: Some(PlanStep::Indexes) }),
         queued: vec!["hs".into(), "w\"3".into()],
         install: Some("OSX,arm64".into()),
         ..PrefillStatus::started("osi", false, PrefillFrom::Lancache, 7)
@@ -113,7 +113,7 @@ fn a_prefill_has_every_field_the_web_app_reads() {
         "{\"game\":\"osi\",\"version\":\"3.3.7\",\"prerelease\":false,\"install\":\"OSX,arm64\",\"from\":\"lancache\",\"state\":\"running\",\
          \"files_total\":4,\"files_done\":2,\"files_skipped\":1,\"bytes_skipped\":25,\"files_missing\":0,\"files_local\":1,\
          \"bytes_local\":30,\"files_rejected\":1,\"bytes_total\":100,\"bytes\":40,\"current\":null,\"error\":null,\
-         \"started_ms\":7,\"finished_ms\":null,\"planning\":{\"done\":3,\"total\":9},\"queued\":[\"hs\",\"w\\\"3\"]}"
+         \"started_ms\":7,\"finished_ms\":null,\"planning\":{\"done\":3,\"total\":9,\"step\":\"indexes\"},\"queued\":[\"hs\",\"w\\\"3\"]}"
     );
 }
 

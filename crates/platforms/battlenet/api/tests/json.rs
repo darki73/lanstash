@@ -5,12 +5,14 @@ use lanstash_battlenet_app::builds::BuildState;
 use lanstash_battlenet_app::products::CatalogProduct;
 use lanstash_battlenet_domain::plan::{Coverage, PlanDetail};
 use lanstash_battlenet_domain::tact::Version;
+use lanstash_ports::prefill::{PlanStep, Planning};
 
 fn state(coverage: Option<Coverage>) -> BuildState {
     BuildState {
         version: Version { build_config: "b1".into(), cdn_config: "c1".into(), name: "3.3.7".into() },
         coverage,
         plan_error: None,
+        planning: None,
     }
 }
 
@@ -18,13 +20,23 @@ fn state(coverage: Option<Coverage>) -> BuildState {
 fn a_build_says_how_much_of_it_is_held() {
     assert_eq!(
         build(&state(Some(Coverage { have: 5, want: 5 }))),
-        "{\"version\":\"3.3.7\",\"build_config\":\"b1\",\"have\":5,\"want\":5,\"complete\":true,\"plan_error\":null}"
+        "{\"version\":\"3.3.7\",\"build_config\":\"b1\",\"have\":5,\"want\":5,\"complete\":true,\"plan_error\":null,\"planning\":null}"
     );
     assert_eq!(
         build(&state(None)),
-        "{\"version\":\"3.3.7\",\"build_config\":\"b1\",\"have\":null,\"want\":null,\"complete\":false,\"plan_error\":null}",
+        "{\"version\":\"3.3.7\",\"build_config\":\"b1\",\"have\":null,\"want\":null,\"complete\":false,\"plan_error\":null,\"planning\":null}",
         "unplanned"
     );
+}
+
+#[test]
+fn a_build_being_planned_says_how_far_and_at_which_step() {
+    let planning = |step| BuildState { planning: Some(Planning { done: 312, total: 680, step }), ..state(None) };
+    assert!(
+        build(&planning(Some(PlanStep::Indexes)))
+            .ends_with("\"planning\":{\"done\":312,\"total\":680,\"step\":\"indexes\"}}")
+    );
+    assert!(build(&planning(None)).ends_with("\"planning\":{\"done\":312,\"total\":680,\"step\":null}}"));
 }
 
 #[test]

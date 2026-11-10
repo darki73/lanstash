@@ -110,7 +110,7 @@ impl Planner for SteamPlanner {
         }
         version(&app.build.map_or_else(|| "public".to_string(), |b| b.to_string()));
         let total = depots.len() as u64;
-        self.set_planning(Some(Planning { done: 0, total }));
+        self.set_planning(Some(Planning { done: 0, total, step: None }));
         // Each depot as an account whose licenses grant it (a DLC may be another account's).
         let groups = lib.by_account(&depots, &self.services.accounts());
         let (mut jobs, mut sizes) = (Vec::new(), Vec::new());
@@ -128,7 +128,7 @@ impl Planner for SteamPlanner {
                         j.push(Job { target: chunk_path(d.id, &c), range: None });
                         s.push(u64::from(c.compressed));
                     }
-                    self.set_planning(Some(Planning { done: done + n as u64 + 1, total }));
+                    self.set_planning(Some(Planning { done: done + n as u64 + 1, total, step: None }));
                 }
                 Ok((j, s))
             })?;

@@ -45,7 +45,7 @@ flags ([configuration.md](configuration.md)). **[verified]**
 
 `admin_listen`; `AdminApi` `crates/adapters/admin-api/src/api/mod.rs`, `handle` in `api/access.rs`, dispatch
 `answer` in `mod.rs`. Version 1, JSON. Every error on an `/api/` path is `{"error": "...", "kind": "..."}`
-(`error_json` `crates/adapters/admin-api/src/render.rs:177`); elsewhere a line of text. Kinds: `not-found`,
+(`error_json` `crates/adapters/admin-api/src/render.rs:188`); elsewhere a line of text. Kinds: `not-found`,
 `method` (405, with `Allow`), `forbidden`, `busy`, `invalid`, `bad-request`, `refused`, `unavailable`,
 `upstream`, `internal`, `failed`, `untrusted`, `sign-in` (401), `admin-only` (403), `wrong`, `wait` (429).
 **[verified]**

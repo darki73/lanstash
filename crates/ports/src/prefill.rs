@@ -108,11 +108,39 @@ pub struct PrefillStatus {
     pub queued: Vec<String>,
 }
 
-/// How far the planning of a prefill job has come: files read of all it reads.
+/// How far a planning (a prefill job's, or a build's on its page) has come: files read of all it
+/// reads, and the step it is at where the platform names its steps.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct Planning {
     pub done: u64,
     pub total: u64,
+    pub step: Option<PlanStep>,
+}
+
+/// A step of a planning, in the order they come.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PlanStep {
+    /// Waiting for another plan to be made first (one is made at a time).
+    Queued,
+    /// The build's configs.
+    Configs,
+    /// The archives' indexes (hundreds for a large game).
+    Indexes,
+    /// The download manifest, and what an install takes of it.
+    Manifest,
+}
+
+impl PlanStep {
+    /// Its name in the API: `queued`, `configs`, `indexes`, `manifest`.
+    #[must_use]
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Queued => "queued",
+            Self::Configs => "configs",
+            Self::Indexes => "indexes",
+            Self::Manifest => "manifest",
+        }
+    }
 }
 
 impl PrefillStatus {

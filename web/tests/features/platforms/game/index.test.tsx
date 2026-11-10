@@ -394,6 +394,28 @@ describe("features/platforms/game", () => {
     fireEvent.click(screen.getByRole("button", { name: "Pre-load StarCraft 1.24" }))
     expect(started).toEqual(["blizzard/sc1live pre"])
   })
+  it("says what working out a build is doing: its step, and how many files are in", () => {
+    const planning = (p: GameDetail["build"]): GameDetail => ({
+      game: "sc1live",
+      product: "s1",
+      region: "eu",
+      build: p,
+      prerelease: null,
+      error: null,
+    })
+    const unplanned = { ...build, have: null, want: null, detail: null }
+    const view = (d: GameDetail) => (
+      <GameView snapshot={snapshot({ usage })} platformId="blizzard" gameId="sc1live" detail={d} />
+    )
+    const { rerender } = render(view(planning({ ...unplanned, planning: { done: 312, total: 680, step: "indexes" } })))
+    expect(screen.getByText("reading the archives' indexes…")).toBeTruthy()
+    expect(screen.getByText("312/680 files read")).toBeTruthy()
+    rerender(view(planning({ ...unplanned, planning: { done: 0, total: 0, step: "queued" } })))
+    expect(screen.getByText("waiting while another build is worked out…")).toBeTruthy()
+    expect(screen.queryByText(/files read/), "no count before the files are known").toBeNull()
+    rerender(view(planning({ ...unplanned, planning: null })))
+    expect(screen.getByText("working out what an install downloads…"), "no step said: the plain words").toBeTruthy()
+  })
   it("offers Stop on the game being prefilled, and says when there is no such game", () => {
     let stops = 0
     const prefill: PrefillActions = {
